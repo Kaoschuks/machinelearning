@@ -1,0 +1,17 @@
+{
+  "name": "willembressers/machine_learning",
+  "type": "library",
+  "description": "A collection of Machine learning classes.",
+  "authors":[
+    {
+      "name":"Willem Bressers",
+      "email":"info@willembressers.nl"
+    }
+  ],
+  "autoload": {
+    "psr-0": {
+      "MachineLearning": "src"
+    }
+  },
+  "bin": ["MachineLearning"]
+}
