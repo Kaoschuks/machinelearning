@@ -2,16 +2,25 @@
   "name": "willembressers/machinelearning",
   "type": "library",
   "description": "A collection of Machine learning PHP classes.",
+  "keywords": ["Machine", "learning", "php", "library"],
+  "homepage": "http://willembressers.github.io/machinelearning/",
+  "license": "Apache-2.0",
   "authors":[
     {
       "name":"Willem Bressers",
-      "email":"info@willembressers.nl"
+      "email":"info@willembressers.nl",
+      "homepage": "https://github.com/willembressers",
+      "role": "Developer"
     }
   ],
+  "support": {
+    "email": "info@willembressers.nl",
+    "issues": "https://github.com/willembressers/machinelearning/issues",
+    "source": "https://github.com/willembressers/machinelearning"
+  },
   "autoload": {
-    "psr-0": {
+    "psr-4": {
       "MachineLearning": "src"
     }
   },
-  "bin": ["MachineLearning"]
 }
