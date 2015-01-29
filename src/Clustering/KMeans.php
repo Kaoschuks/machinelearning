@@ -2,25 +2,51 @@
 
 namespace MachineLearning\Clustering;
 
-class KMeans {
+use MachineLearning\Clustering\Cluster;
+use MachineLearning\MachineLearningInterface;
 
-  public $data =array();
-  public $num_clusters;
+/**
+ *
+ */
+class KMeans extends Cluster implements MachineLearningInterface{
 
-  public function __construct($data, $num_clusters = 3) {
-    $this->data = $data;
-    $this->num_clusters = $num_clusters;
+  public $clusters;
+
+  /**
+   * Basic constructor.
+   */
+  public function __construct() {
+    $this->setNumClusters(3);
   }
 
-  public function cluster() {
-    if (!$this->validate()) {
-      return;
+  /**
+   * [setNumClusters description]
+   *
+   * @param [type] $num [description]
+   */
+  public function setNumClusters($num) {
+    if (is_int($num)) {
+      $this->config['num_clusters'] = $num;
     }
-
-    var_dump($this->num_clusters);
   }
 
-  public function validate() {
-    return $this->num_clusters >= count($this->data);
+  /**
+   * [learn description]
+   *
+   * @return [type] [description]
+   */
+  public function learn() {
+    $this->generateClusters();
+  }
+
+  /**
+   * [generateClusters description]
+   *
+   * @return [type] [description]
+   */
+  private function generateClusters() {
+    for ($i = 0; $i < $this->config['num_clusters']; $i++) {
+      $this->clusters[] = array();
+    }
   }
 }

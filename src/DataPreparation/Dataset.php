@@ -2,11 +2,15 @@
 
 namespace MachineLearning\DataPreparation;
 
+/**
+ *
+ */
 class Dataset {
 
   public $data;
   public $num_rows;
   public $columns;
+  public $max_nominal_values;
 
   /**
    * Basic constructor.
@@ -14,6 +18,7 @@ class Dataset {
    * @param [array] $data [The dataset to work with.]
    */
   public function __construct($data) {
+    $this->max_nominal_values = 100;
     $this->data = $data;
     $this->num_rows = count($data);
 
@@ -31,6 +36,7 @@ class Dataset {
       $this->columns[$key]['type'] = $type;
 
       if (is_numeric($value)) {
+        $this->columns[$key]['datatype'] = 'numeric';
         $mean = $this->mean($values);
         $variance = $this->variance($values, $mean);
 
@@ -39,6 +45,14 @@ class Dataset {
         $this->columns[$key]['mean'] = $mean;
         $this->columns[$key]['variance'] = $variance;
         $this->columns[$key]['std_dev'] = sqrt($variance);
+      }
+
+      if (is_string($value)) {
+        $options = array_unique($values);
+        if (count($options) < $this->max_nominal_values) {
+          $this->columns[$key]['datatype'] = 'nominal';
+          $this->columns[$key]['options'] = array_values($options);
+        }
       }
     }
   }

@@ -3,7 +3,7 @@
   "type": "library",
   "description": "A collection of Machine learning PHP classes.",
   "keywords": ["Machine", "learning", "php", "library"],
-  "homepage": "http://willembressers.github.io/machinelearning/",
+  "homepage": "http://machinelearning.readthedocs.org/",
   "license": "Apache-2.0",
   "authors":[
     {
