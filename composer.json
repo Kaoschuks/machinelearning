@@ -1,7 +1,7 @@
 {
-  "name": "willembressers/MachineLearning",
+  "name": "willembressers/machinelearning",
   "type": "library",
-  "description": "A collection of Machine learning classes.",
+  "description": "A collection of Machine learning PHP classes.",
   "authors":[
     {
       "name":"Willem Bressers",
