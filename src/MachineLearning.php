@@ -51,4 +51,13 @@ class MachineLearning {
 
     return $this->mean($values);
   }
+
+    /**
+   * Picks a random number, and returns a float.
+   *
+   * @return [type] [description]
+   */
+  public function rand($min, $max) {
+    return $min + ($max - $min) * mt_rand(0, 32767)/32767;
+  }
 }

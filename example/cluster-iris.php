@@ -12,5 +12,4 @@ $cluster = new KMeans();
 $cluster->addTrainingData($dataset);
 $cluster->train();
 
-// print_r($dataset->columns);
 print_r($cluster->clusters);

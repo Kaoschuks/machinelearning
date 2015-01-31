@@ -10,7 +10,7 @@ use MachineLearning\MachineLearning;
 class Dataset extends MachineLearning {
 
   public $data;
-  public $columns;
+  private $columns;
   private $config;
 
   /**
@@ -44,5 +44,15 @@ class Dataset extends MachineLearning {
         }
       }
     }
+  }
+
+  /**
+   * [getColumnData description]
+   *
+   * @param  string $key [description]
+   * @return [type]      [description]
+   */
+  public function getColumnData($key = '') {
+    return @$this->columns[$key] ?: $this->columns;
   }
 }

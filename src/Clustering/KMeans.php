@@ -58,14 +58,24 @@ class KMeans extends Cluster implements MachineLearningInterface{
   }
 
   /**
+   * [addTestData description]
+   *
+   * @param Dataset $dataset [description]
+   */
+  public function addTestData(Dataset $dataset) {
+    parent::addTestData($dataset);
+  }
+
+  /**
    * [generateClusters description]
    *
    * @return [type] [description]
    */
   private function generateClusters() {
+    $columnData = $this->trainingData->getColumnData();
     for ($cluster_key = 1; $cluster_key <= $this->num_clusters; $cluster_key++) {
       $centroids = array();
-      foreach ($this->trainingData->columns as $key => $column_data) {
+      foreach ($columnData as $key => $column_data) {
         if ($column_data['datatype'] == 'numeric') {
           $centroids[$key] = $this->rand($column_data['min'], $column_data['max']);
         }
@@ -80,29 +90,23 @@ class KMeans extends Cluster implements MachineLearningInterface{
    * @return [type] [description]
    */
   private function updateClusters(&$converged) {
+    $columnData = $this->trainingData->getColumnData();
     foreach ($this->clusters as $cluster_key => $cluster) {
       $centroids = array();
       foreach ($cluster['data'] as $row_key => $row) {
         foreach ($row as $key => $value) {
-          // @TODO check on numeric.
-          $values = array_column($cluster['data'], $key);
-          $centroids[$key] = $this->rand(min($values), max($values));
+          if ($columnData[$key]['datatype'] == 'numeric') {
+            $values = array_column($cluster['data'], $key);
+            $centroids[$key] = $this->rand(min($values), max($values));
+          }
         }
       }
-      // @TODO update the centroids.
+      $this->clusters[$cluster_key]['centroids'] = $centroids;
+      unset($this->clusters[$cluster_key]['data']);
     }
 
     // @TODO do some calculation for convergion.
     $converged = TRUE;
-  }
-
-  /**
-   * Picks a random number, and returns a float.
-   *
-   * @return [type] [description]
-   */
-  private function rand($min, $max) {
-    return $min + ($max - $min) * mt_rand(0, 32767)/32767;
   }
 
   /**
@@ -112,12 +116,13 @@ class KMeans extends Cluster implements MachineLearningInterface{
    * @return [type]      [description]
    */
   private function getNearestCluster($row) {
+    $columnData = $this->trainingData->getColumnData();
     $leastWcss = PHP_INT_MAX;
     $nearestClusterKey = NULL;
     foreach ($this->clusters as $cluster_key => $cluster) {
       $wcss = 0;
       foreach ($row as $key => $value) {
-        if ($this->trainingData->columns[$key]['datatype'] == 'numeric') {
+        if ($columnData[$key]['datatype'] == 'numeric') {
           $wcss += pow($value - $cluster['centroids'][$key], 2);
         }
       }

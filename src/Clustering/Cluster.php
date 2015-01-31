@@ -2,16 +2,16 @@
 
 namespace MachineLearning\Clustering;
 
+use MachineLearning\MachineLearning;
 use MachineLearning\DataPreparation\Dataset;
 
 /**
  *
  */
-class Cluster {
+class Cluster extends MachineLearning {
 
-  public $dataset;
   public $trainingData;
-
+  public $testData;
   public $clusters;
 
   /**
@@ -21,5 +21,14 @@ class Cluster {
    */
   public function addTrainingData(Dataset $dataset) {
     $this->trainingData = $dataset;
+  }
+
+  /**
+   * [addTestData description]
+   *
+   * @param Dataset $dataset [description]
+   */
+  public function addTestData(Dataset $dataset) {
+    $this->testData = $dataset;
   }
 }
