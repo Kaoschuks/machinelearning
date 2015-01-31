@@ -6,5 +6,8 @@ namespace MachineLearning;
  *
  */
 interface MachineLearningInterface {
-  public function learn();
+
+  public function train();
+  public function test();
+
 }

@@ -2,10 +2,12 @@
 
 namespace MachineLearning\DataPreparation;
 
+use MachineLearning\MachineLearning;
+
 /**
  *
  */
-class Dataset {
+class Dataset extends MachineLearning {
 
   public $data;
   public $columns;
@@ -20,15 +22,6 @@ class Dataset {
     $this->data = $data;
     $this->config['max_nominal_values'] = $max_nominal_values;
     $this->setColumnData();
-  }
-
-  /**
-   * [getNumRows description]
-   *
-   * @return [type] [description]
-   */
-  public function getNumRows() {
-    return count($this->data);
   }
 
   /**
@@ -51,49 +44,5 @@ class Dataset {
         }
       }
     }
-  }
-
-  /**
-   * [getDefaultStatistics description]
-   *
-   * @param  [type] $values [description]
-   * @return [type]         [description]
-   */
-  private function getDefaultStatistics($values) {
-    $mean = $this->mean($values);
-    $variance = $this->variance($values, $mean);
-
-    return array(
-      'min' => min($values),
-      'max' => max($values),
-      'mean' => $mean,
-      'variance' => $variance,
-      'std_dev' => sqrt($variance),
-    );
-  }
-
-  /**
-   * Calculates the mean of the given values.
-   *
-   * @param  [array] $values [An array of column values.]
-   * @return [float]         [The calculated mean.]
-   */
-  private function mean($values) {
-    return array_sum($values) / $this->getNumRows();
-  }
-
-  /**
-   * Calculates the variance of an array of values based on the mean.
-   *
-   * @param  [array] $values [An array of column values.]
-   * @param  [float] $mean   [The mean of the given array.]
-   * @return [float]         [The calculated variance.]
-   */
-  private function variance($values, $mean) {
-    $values = array_map(function ($value) use ($mean) {
-      return pow($value - $mean, 2);
-    }, $values);
-
-    return array_sum($values) / $this->getNumRows();
   }
 }

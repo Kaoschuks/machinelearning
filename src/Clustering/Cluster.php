@@ -10,21 +10,16 @@ use MachineLearning\DataPreparation\Dataset;
 class Cluster {
 
   public $dataset;
-  protected $config;
+  public $trainingData;
+
+  public $clusters;
 
   /**
-   * Basic constructor.
-   */
-  public function __construct($dataset) {
-    $this->dataset = $dataset;
-  }
-
-  /**
-   * [addData description]
+   * [addTrainingData description]
    *
    * @param Dataset $dataset [description]
    */
-  public function updateDataset(Dataset $dataset) {
-    $this->dataset = $dataset;
+  public function addTrainingData(Dataset $dataset) {
+    $this->trainingData = $dataset;
   }
 }

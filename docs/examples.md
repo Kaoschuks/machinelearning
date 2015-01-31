@@ -1,6 +1,7 @@
-<?php
+# Examples
 
-require '../vendor/autoload.php';
+```php
+require 'vendor/autoload.php';
 
 use MachineLearning\DataPreparation\Dataset;
 use MachineLearning\Clustering\KMeans;
@@ -12,5 +13,5 @@ $cluster = new KMeans();
 $cluster->addTrainingData($dataset);
 $cluster->train();
 
-// print_r($dataset->columns);
 print_r($cluster->clusters);
+```

@@ -1,0 +1,9 @@
+site_name: Machine Learning
+pages:
+- [index.md, Home]
+- [install.md, Installation]
+- [examples.md, Examples]
+theme: readthedocs
+site_author: ""
+repo_url: https://github.com/willembressers/machinelearning
+include_search: true

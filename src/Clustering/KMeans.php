@@ -4,32 +4,32 @@ namespace MachineLearning\Clustering;
 
 use MachineLearning\Clustering\Cluster;
 use MachineLearning\MachineLearningInterface;
+use MachineLearning\DataPreparation\Dataset;
 
 /**
  * https://github.com/simonrobb/php-kmeans/blob/master/KMeans.php
  */
 class KMeans extends Cluster implements MachineLearningInterface{
 
-  public $clusters;
+  public $num_clusters;
 
   /**
    * Basic constructor.
    */
-  public function __construct($dataset, $num_clusters = 3) {
-    parent::__construct($dataset);
-    $this->generateClusters($num_clusters);
+  public function __construct($num_clusters = 3) {
+    $this->num_clusters = $num_clusters;
   }
 
   /**
-   * [learn description]
+   * [train description]
    *
    * @return [type] [description]
    */
-  public function learn() {
+  public function train() {
     $converged = FALSE;
     do {
       foreach ($this->clusters as $cluster_key => $cluster) {
-        foreach ($this->dataset->data as $row_key => $row) {
+        foreach ($this->trainingData->data as $row_key => $row) {
           $nearestClusterKey = $this->getNearestCluster($row);
           $this->clusters[$nearestClusterKey]['data'][$row_key] = $row;
         }
@@ -39,19 +39,38 @@ class KMeans extends Cluster implements MachineLearningInterface{
   }
 
   /**
+   * [test description]
+   *
+   * @return [type] [description]
+   */
+  public function test() {
+
+  }
+
+  /**
+   * [addTrainingData description]
+   *
+   * @param Dataset $dataset [description]
+   */
+  public function addTrainingData(Dataset $dataset) {
+    parent::addTrainingData($dataset);
+    $this->generateClusters();
+  }
+
+  /**
    * [generateClusters description]
    *
    * @return [type] [description]
    */
-  private function generateClusters($num_clusters) {
-    for ($i = 1; $i <= $num_clusters; $i++) {
+  private function generateClusters() {
+    for ($cluster_key = 1; $cluster_key <= $this->num_clusters; $cluster_key++) {
       $centroids = array();
-      foreach ($this->dataset->columns as $key => $column_data) {
+      foreach ($this->trainingData->columns as $key => $column_data) {
         if ($column_data['datatype'] == 'numeric') {
           $centroids[$key] = $this->rand($column_data['min'], $column_data['max']);
         }
       }
-      $this->clusters[$i] = $centroids;
+      $this->clusters[$cluster_key]['centroids'] = $centroids;
     }
   }
 
@@ -98,8 +117,8 @@ class KMeans extends Cluster implements MachineLearningInterface{
     foreach ($this->clusters as $cluster_key => $cluster) {
       $wcss = 0;
       foreach ($row as $key => $value) {
-        if ($this->dataset->columns[$key]['datatype'] == 'numeric') {
-          $wcss += pow($value - $cluster[$key], 2);
+        if ($this->trainingData->columns[$key]['datatype'] == 'numeric') {
+          $wcss += pow($value - $cluster['centroids'][$key], 2);
         }
       }
       if ($wcss < $leastWcss) {
