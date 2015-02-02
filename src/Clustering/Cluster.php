@@ -3,30 +3,37 @@
 namespace MachineLearning\Clustering;
 
 use MachineLearning\MachineLearning;
-use MachineLearning\DataPreparation\Dataset;
+use MachineLearning\Data\Dataset;
 
 /**
- *
+ * Base class for the clustering algortims.
  */
 class Cluster extends MachineLearning {
 
-  public $trainingData;
-  public $testData;
   public $clusters;
 
   /**
-   * [addTrainingData description]
+   * Add trainings data to train the clusters.
    *
-   * @param Dataset $dataset [description]
+   * @param Dataset $dataset
    */
   public function addTrainingData(Dataset $dataset) {
     $this->trainingData = $dataset;
   }
 
   /**
-   * [addTestData description]
+   * Add validation data to validate the clusters.
    *
-   * @param Dataset $dataset [description]
+   * @param Dataset $dataset
+   */
+  public function addValidationData(Dataset $dataset) {
+    $this->validationData = $dataset;
+  }
+
+  /**
+   * Add test data.
+   *
+   * @param Dataset $dataset
    */
   public function addTestData(Dataset $dataset) {
     $this->testData = $dataset;

@@ -3,10 +3,13 @@
 namespace MachineLearning;
 
 /**
- *
+ * Basic Machine learning utility class.
  */
 class MachineLearning {
 
+  public $trainingData;
+  public $validationData;
+  public $testData;
 
   /**
    * [getDefaultStatistics description]

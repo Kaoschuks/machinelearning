@@ -4,10 +4,10 @@ namespace MachineLearning\Clustering;
 
 use MachineLearning\Clustering\Cluster;
 use MachineLearning\MachineLearningInterface;
-use MachineLearning\DataPreparation\Dataset;
+use MachineLearning\Data\Dataset;
 
 /**
- * https://github.com/simonrobb/php-kmeans/blob/master/KMeans.php
+ * Cluster the data, based on the KMeans approach.
  */
 class KMeans extends Cluster implements MachineLearningInterface{
 
@@ -20,37 +20,10 @@ class KMeans extends Cluster implements MachineLearningInterface{
     $this->num_clusters = $num_clusters;
   }
 
-  /**
-   * [train description]
+    /**
+   * Add trainings data to train the clusters.
    *
-   * @return [type] [description]
-   */
-  public function train() {
-    $converged = FALSE;
-    do {
-      foreach ($this->clusters as $cluster_key => $cluster) {
-        foreach ($this->trainingData->data as $row_key => $row) {
-          $nearestClusterKey = $this->getNearestCluster($row);
-          $this->clusters[$nearestClusterKey]['data'][$row_key] = $row;
-        }
-      }
-      $this->updateClusters($converged);
-    } while (!$converged);
-  }
-
-  /**
-   * [test description]
-   *
-   * @return [type] [description]
-   */
-  public function test() {
-
-  }
-
-  /**
-   * [addTrainingData description]
-   *
-   * @param Dataset $dataset [description]
+   * @param Dataset $dataset
    */
   public function addTrainingData(Dataset $dataset) {
     parent::addTrainingData($dataset);
@@ -58,18 +31,55 @@ class KMeans extends Cluster implements MachineLearningInterface{
   }
 
   /**
-   * [addTestData description]
+   * Add validation data to validate the clusters.
    *
-   * @param Dataset $dataset [description]
+   * @param Dataset $dataset
+   */
+  public function addValidationData(Dataset $dataset) {
+    parent::addValidationData($dataset);
+  }
+
+  /**
+   * Add test data.
+   *
+   * @param Dataset $dataset
    */
   public function addTestData(Dataset $dataset) {
     parent::addTestData($dataset);
   }
 
   /**
-   * [generateClusters description]
-   *
-   * @return [type] [description]
+   * Train the clusters based on the trainingdata.
+   */
+  public function train() {
+    $converged = FALSE;
+
+    // Keep on training until convergion.
+    do {
+      foreach ($this->trainingData->data as $row_key => $row) {
+        $nearestClusterKey = $this->getNearestCluster($row);
+        $this->clusters[$nearestClusterKey]['data'][$row_key] = $row;
+      }
+      $this->updateClusters($converged);
+    } while (!$converged);
+  }
+
+  /**
+   * Validate the clusters.
+   */
+  public function validate() {
+    // @TODO ...
+  }
+
+  /**
+   * Test the clusters on the testdata.
+   */
+  public function test() {
+    // @TODO ...
+  }
+
+  /**
+   * Initialize the clusters.
    */
   private function generateClusters() {
     $columnData = $this->trainingData->getColumnData();
@@ -85,14 +95,21 @@ class KMeans extends Cluster implements MachineLearningInterface{
   }
 
   /**
-   * [updateClusters description]
+   * Update the cluster centroids for the next iteration, or mark the clusters as converged.
    *
-   * @return [type] [description]
+   * @param  boolean   &$converged
    */
   private function updateClusters(&$converged) {
     $columnData = $this->trainingData->getColumnData();
     foreach ($this->clusters as $cluster_key => $cluster) {
       $centroids = array();
+
+      // No data available, thus noting to update.
+      if (!@$cluster['data']) {
+        continue;
+      }
+
+      // Pick new random centroids based on the subset.
       foreach ($cluster['data'] as $row_key => $row) {
         foreach ($row as $key => $value) {
           if ($columnData[$key]['datatype'] == 'numeric') {
@@ -101,6 +118,8 @@ class KMeans extends Cluster implements MachineLearningInterface{
           }
         }
       }
+
+      // Update the centroids, and remove the subset.
       $this->clusters[$cluster_key]['centroids'] = $centroids;
       unset($this->clusters[$cluster_key]['data']);
     }
@@ -110,15 +129,17 @@ class KMeans extends Cluster implements MachineLearningInterface{
   }
 
   /**
-   * [getNearestCluster description]
+   * Get the nearest cluster based on the give row.
    *
-   * @param  [type] $row [description]
-   * @return [type]      [description]
+   * @param  array  $row
+   * @return The cluster key.
    */
   private function getNearestCluster($row) {
     $columnData = $this->trainingData->getColumnData();
     $leastWcss = PHP_INT_MAX;
     $nearestClusterKey = NULL;
+
+    // Calculate the distance from the the centroids.
     foreach ($this->clusters as $cluster_key => $cluster) {
       $wcss = 0;
       foreach ($row as $key => $value) {

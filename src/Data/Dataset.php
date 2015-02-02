@@ -1,11 +1,11 @@
 <?php
 
-namespace MachineLearning\DataPreparation;
+namespace MachineLearning\Data;
 
 use MachineLearning\MachineLearning;
 
 /**
- *
+ * Base class for the data handling.
  */
 class Dataset extends MachineLearning {
 
@@ -19,7 +19,7 @@ class Dataset extends MachineLearning {
    * @param [array] $data [The dataset to work with.]
    */
   public function __construct($data, $max_nominal_values = 100) {
-    $this->data = $data;
+    $this->data = $this->addUniqueKeys($data);
     $this->config['max_nominal_values'] = $max_nominal_values;
     $this->setColumnData();
   }
@@ -54,5 +54,21 @@ class Dataset extends MachineLearning {
    */
   public function getColumnData($key = '') {
     return @$this->columns[$key] ?: $this->columns;
+  }
+
+  /**
+   * Ensure the data has unique keys.
+   */
+  private function addUniqueKeys($data) {
+    // Set unique keys on eacht row.
+    foreach ($data as $key => $row) {
+      $data[uniqid()] = $row;
+      unset($data[$key]);
+    }
+
+    // Shuffle the data random.
+    shuffle($data);
+
+    return $data;
   }
 }

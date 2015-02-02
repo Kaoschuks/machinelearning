@@ -2,7 +2,7 @@
 
 require '../vendor/autoload.php';
 
-use MachineLearning\DataPreparation\Dataset;
+use MachineLearning\Data\Dataset;
 use MachineLearning\Clustering\KMeans;
 
 require_once dirname(__FILE__) . "/datasets/iris.php";
