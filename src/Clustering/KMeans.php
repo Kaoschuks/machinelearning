@@ -12,12 +12,14 @@ use MachineLearning\Data\Dataset;
 class KMeans extends Cluster implements MachineLearningInterface{
 
   public $num_clusters;
+  public $convergion_distance;
 
   /**
    * Basic constructor.
    */
-  public function __construct($num_clusters = 3) {
+  public function __construct($num_clusters = 3, $convergion_distance = 1) {
     $this->num_clusters = $num_clusters;
+    $this->convergion_distance = $convergion_distance;
   }
 
     /**
@@ -100,8 +102,11 @@ class KMeans extends Cluster implements MachineLearningInterface{
    * @param  boolean   &$converged
    */
   private function updateClusters(&$converged) {
+    $distance = 0;
     $columnData = $this->trainingData->getColumnData();
+
     foreach ($this->clusters as $cluster_key => $cluster) {
+      $old_centroids = $this->clusters[$cluster_key]['centroids'];
       $centroids = array();
 
       // No data available, thus noting to update.
@@ -114,18 +119,18 @@ class KMeans extends Cluster implements MachineLearningInterface{
         foreach ($row as $key => $value) {
           if ($columnData[$key]['datatype'] == 'numeric') {
             $values = array_column($cluster['data'], $key);
-            $centroids[$key] = $this->rand(min($values), max($values));
+            $centroids[$key] = $this->mean($values);
           }
         }
       }
 
       // Update the centroids, and remove the subset.
       $this->clusters[$cluster_key]['centroids'] = $centroids;
+      $distance += $this->euclideanDistance($old_centroids, $centroids);
       unset($this->clusters[$cluster_key]['data']);
     }
 
-    // @TODO do some calculation for convergion.
-    $converged = TRUE;
+    $converged = $distance <= $this->convergion_distance ? TRUE : FALSE;
   }
 
   /**

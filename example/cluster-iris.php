@@ -8,7 +8,7 @@ use MachineLearning\Clustering\KMeans;
 require_once dirname(__FILE__) . "/datasets/iris.php";
 
 $dataset = new Dataset($data);
-$cluster = new KMeans();
+$cluster = new KMeans(3, 0.001);
 $cluster->addTrainingData($dataset);
 $cluster->train();
 

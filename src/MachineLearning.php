@@ -63,4 +63,24 @@ class MachineLearning {
   public function rand($min, $max) {
     return $min + ($max - $min) * mt_rand(0, 32767)/32767;
   }
+
+  /**
+   * Calculate the Euclidean distance between 2 arrays with the same keys.
+   *
+   * @param  [type] $p [description]
+   * @param  [type] $q [description]
+   * @return [type]    [description]
+   */
+  public function euclideanDistance($p, $q) {
+    if (count($p) != count($q)) {
+      return;
+    }
+
+    $total = 0;
+    foreach ($p as $key => $pn) {
+      $total += pow($p[$key] - $q[$key], 2);
+    }
+
+    return sqrt($total);
+  }
 }
