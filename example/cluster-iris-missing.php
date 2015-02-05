@@ -5,7 +5,7 @@ require '../vendor/autoload.php';
 use MachineLearning\Data\Dataset;
 use MachineLearning\Clustering\KMeans;
 
-require_once dirname(__FILE__) . "/datasets/iris.php";
+require_once dirname(__FILE__) . "/datasets/iris-missing.php";
 
 $dataset = new Dataset();
 $dataset->addData($data);

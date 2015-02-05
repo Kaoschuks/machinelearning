@@ -10,6 +10,10 @@ use MachineLearning\Data\Dataset;
  */
 class Cluster extends MachineLearning {
 
+  public $trainingData;
+  public $validationData;
+  public $testData;
+
   public $clusters;
 
   /**

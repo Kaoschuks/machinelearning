@@ -7,10 +7,6 @@ namespace MachineLearning;
  */
 class MachineLearning {
 
-  public $trainingData;
-  public $validationData;
-  public $testData;
-
   /**
    * [getDefaultStatistics description]
    *

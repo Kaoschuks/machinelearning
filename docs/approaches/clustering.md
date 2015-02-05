@@ -7,21 +7,26 @@ Cluster analysis is the assignment of a set of observations into subsets (called
 Wiki article: [k-means clustering](http://en.wikipedia.org/wiki/K-means_clustering)
 
 ### Usage
-Create a new KMeans object with two variables:
+Create a new KMeans object with three variables:
 1. Number of clusters
 2. Total cumulated euclidean distance of all d Dimensions. In otherwords the threshold when convergion is achieved.
+3. The initialization method (forgy, random).
 Add the trainings data to the cluster, and train the clusters.
+
+Both initialization methods result in randomly chosen cluster centroids, this results in different cluster centroids after training.
 
 ### Example
 ```php
-require 'vendor/autoload.php';
+require '../vendor/autoload.php';
 
-use MachineLearning\DataPreparation\Dataset;
+use MachineLearning\Data\Dataset;
 use MachineLearning\Clustering\KMeans;
 
 require_once dirname(__FILE__) . "/datasets/iris.php";
 
-$dataset = new Dataset($data);
+$dataset = new Dataset();
+$dataset->addData($data);
+
 $cluster = new KMeans(3, 0.001);
 $cluster->addTrainingData($dataset);
 $cluster->train();
