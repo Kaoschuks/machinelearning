@@ -9,7 +9,7 @@ use MachineLearning\Data\Dataset;
 /**
  * Cluster the data, based on the KMeans approach.
  */
-class KMeans extends Cluster implements MachineLearningInterface{
+class KMeans extends Cluster implements MachineLearningInterface {
 
   public $num_clusters;
   public $convergion_distance;

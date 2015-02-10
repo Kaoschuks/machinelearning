@@ -33,3 +33,6 @@ $cluster->train();
 
 print_r($cluster->clusters);
 ```
+
+## k-nearest neighbors
+Wiki article: [k-nearest neighbors](http://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm)
