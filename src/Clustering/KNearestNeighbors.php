@@ -3,13 +3,13 @@
 namespace MachineLearning\Clustering;
 
 use MachineLearning\Clustering\Cluster;
-use MachineLearning\MachineLearningInterface;
+use MachineLearning\Interfaces\InstanceBasedLearningInterface;
 use MachineLearning\Data\Dataset;
 
 /**
  * Cluster the data, based on the KMeans approach.
  */
-class KNearestNeighbors extends Cluster implements MachineLearningInterface {
+class KNearestNeighbors extends Cluster implements InstanceBasedLearningInterface {
 
   public $num_nearest_neighbors;
 
@@ -18,47 +18,6 @@ class KNearestNeighbors extends Cluster implements MachineLearningInterface {
    */
   public function __construct($num_nearest_neighbors = 3) {
     $this->num_nearest_neighbors = $num_nearest_neighbors;
-  }
-
-    /**
-   * Add trainings data to train the clusters.
-   *
-   * @param Dataset $dataset
-   */
-  public function addTrainingData(Dataset $dataset) {
-    parent::addTrainingData($dataset);
-  }
-
-  /**
-   * Add validation data to validate the clusters.
-   *
-   * @param Dataset $dataset
-   */
-  public function addValidationData(Dataset $dataset) {
-    parent::addValidationData($dataset);
-  }
-
-  /**
-   * Add test data.
-   *
-   * @param Dataset $dataset
-   */
-  public function addTestData(Dataset $dataset) {
-    parent::addTestData($dataset);
-  }
-
-  /**
-   * Train the clusters based on the trainingdata.
-   */
-  public function train() {
-    // No need for training because of instance-based learning, or lazy learning,
-  }
-
-  /**
-   * Validate the clusters.
-   */
-  public function validate() {
-    // @TODO ...
   }
 
   /**

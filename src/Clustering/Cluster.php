@@ -3,12 +3,13 @@
 namespace MachineLearning\Clustering;
 
 use MachineLearning\MachineLearning;
+use MachineLearning\Interfaces\ControllerInterface;
 use MachineLearning\Data\Dataset;
 
 /**
  * Base class for the clustering algortims.
  */
-class Cluster extends MachineLearning {
+class Cluster extends MachineLearning implements ControllerInterface {
 
   public $trainingData;
   public $validationData;

@@ -32,10 +32,7 @@ class Dataset {
 
     // Fill the missing values with NULL.
     foreach ($raw_data as $row_key => $row_values) {
-      $data[] = $row_values + $column_keys + array(
-        'row_key' => $row_key,
-        'uniqid' => uniqid(),
-      );
+      $data[] = $row_values + $column_keys;
     }
 
     // Randomize the data.

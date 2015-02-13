@@ -3,13 +3,14 @@
 namespace MachineLearning\Clustering;
 
 use MachineLearning\Clustering\Cluster;
-use MachineLearning\MachineLearningInterface;
+use MachineLearning\Interfaces\LearningInterface;
+
 use MachineLearning\Data\Dataset;
 
 /**
  * Cluster the data, based on the KMeans approach.
  */
-class KMeans extends Cluster implements MachineLearningInterface {
+class KMeans extends Cluster implements LearningInterface {
 
   public $num_clusters;
   public $convergion_distance;
@@ -24,7 +25,7 @@ class KMeans extends Cluster implements MachineLearningInterface {
     $this->initialization_method = $initialization_method;
   }
 
-    /**
+  /**
    * Add trainings data to train the clusters.
    *
    * @param Dataset $dataset
@@ -32,24 +33,6 @@ class KMeans extends Cluster implements MachineLearningInterface {
   public function addTrainingData(Dataset $dataset) {
     parent::addTrainingData($dataset);
     $this->initialization();
-  }
-
-  /**
-   * Add validation data to validate the clusters.
-   *
-   * @param Dataset $dataset
-   */
-  public function addValidationData(Dataset $dataset) {
-    parent::addValidationData($dataset);
-  }
-
-  /**
-   * Add test data.
-   *
-   * @param Dataset $dataset
-   */
-  public function addTestData(Dataset $dataset) {
-    parent::addTestData($dataset);
   }
 
   /**
@@ -66,13 +49,6 @@ class KMeans extends Cluster implements MachineLearningInterface {
       }
       $this->updateClusters($converged);
     } while (!$converged);
-  }
-
-  /**
-   * Validate the clusters.
-   */
-  public function validate() {
-    // @TODO ...
   }
 
   /**
