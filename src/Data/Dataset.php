@@ -55,8 +55,10 @@ class Dataset {
    * @return Dataset $subset
    */
   private function subset($start, $end) {
+    $data = array_slice($this->data, $start, $end, TRUE);
+
     $subset = new Dataset();
-    $subset->data = array_slice($this->data, $start, $end, TRUE);
+    $subset->addData($data);
 
     return $subset;
   }

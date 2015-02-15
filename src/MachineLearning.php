@@ -8,10 +8,7 @@ namespace MachineLearning;
 class MachineLearning {
 
   /**
-   * [getDefaultStatistics description]
-   *
-   * @param  [type] $values [description]
-   * @return [type]         [description]
+   * Get the default statistics of an array.
    */
   public function getDefaultStatistics($values) {
     $mean = $this->mean($values);
@@ -28,9 +25,6 @@ class MachineLearning {
 
   /**
    * Calculates the mean of the given values.
-   *
-   * @param  [array] $values [An array of column values.]
-   * @return [float]         [The calculated mean.]
    */
   public function mean($values) {
     return array_sum($values) / count($values);
@@ -38,10 +32,6 @@ class MachineLearning {
 
   /**
    * Calculates the variance of an array of values based on the mean.
-   *
-   * @param  [array] $values [An array of column values.]
-   * @param  [float] $mean   [The mean of the given array.]
-   * @return [float]         [The calculated variance.]
    */
   public function variance($values, $mean) {
     $values = array_map(function ($value) use ($mean) {
@@ -51,10 +41,8 @@ class MachineLearning {
     return $this->mean($values);
   }
 
-    /**
-   * Picks a random number, and returns a float.
-   *
-   * @return [type] [description]
+  /**
+   * Custom random method that works with floats.
    */
   public function rand($min, $max) {
     return $min + ($max - $min) * mt_rand(0, 32767)/32767;
@@ -62,10 +50,6 @@ class MachineLearning {
 
   /**
    * Calculate the Euclidean distance between 2 arrays with the same keys.
-   *
-   * @param  [type] $p [description]
-   * @param  [type] $q [description]
-   * @return [type]    [description]
    */
   public function euclideanDistance($p, $q) {
     if (count($p) != count($q)) {
@@ -78,5 +62,23 @@ class MachineLearning {
     }
 
     return sqrt($total);
+  }
+
+  /**
+   * Returns the item in the array that occurs the most.
+   *
+   * All values are sorted by count, and the first (highest) is returned. Values with the same count are also sorted but only the first one is returned.
+   */
+  public function majority($values) {
+    // Count each unique value.
+    $count_values = array_count_values(array_map(function ($value) {
+      return (string) $value;
+    }, $values));
+
+    // Sort from high to low.
+    arsort($count_values);
+
+    // return the first item.
+    return reset(array_flip($count_values));
   }
 }

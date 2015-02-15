@@ -4,6 +4,7 @@ pages:
 - [install.md, Installation]
 - [data/preprocessing.md, 'Data', 'Pre-processing']
 - [approaches/clustering.md, 'Learning approaches', 'Clustering']
+- [approaches/supervised.md, 'Learning approaches', 'Supervised']
 theme: readthedocs
 site_author: ""
 repo_url: https://github.com/willembressers/machinelearning
