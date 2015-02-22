@@ -11,7 +11,7 @@ $dataset = new Dataset();
 $dataset->addData($data);
 
 $cluster = new KMeans(3, 0.001);
-$cluster->addTrainingData($dataset);
+$cluster->setTrainingData($dataset);
 $cluster->train();
 
 print_r($cluster->clusters);

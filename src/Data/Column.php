@@ -29,6 +29,11 @@ class Column extends MachineLearning
         }
     }
 
+    public function isNumeric()
+    {
+        return $this->datatype == 'numeric';
+    }
+
     /**
      * Get the column type.
      */

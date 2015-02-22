@@ -12,8 +12,8 @@ $dataset->addData($data);
 list($training_data, , $test_data) = $dataset->split(0.8, 0, 0.2);
 
 $cluster = new KNearestNeighbors();
-$cluster->addTrainingData($training_data);
-$cluster->addTestData($test_data);
+$cluster->setTrainingData($training_data);
+$cluster->setTestData($test_data);
 $cluster->test();
 
-print_r($cluster->testData->data);
+print_r($cluster->testData->vectors);

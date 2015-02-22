@@ -9,7 +9,7 @@ use MachineLearning\Data\Dataset;
  */
 interface ControllerInterface
 {
-    public function addTrainingData(Dataset $dataset);
-    public function addValidationData(Dataset $dataset);
-    public function addTestData(Dataset $dataset);
+    public function setTrainingData(Dataset $dataset);
+    public function setValidationData(Dataset $dataset);
+    public function setTestData(Dataset $dataset);
 }

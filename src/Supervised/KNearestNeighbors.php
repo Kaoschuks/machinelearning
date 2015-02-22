@@ -2,6 +2,7 @@
 
 namespace MachineLearning\Supervised;
 
+use MachineLearning\Data\Subset;
 use MachineLearning\Interfaces\InstanceBasedLearningInterface;
 
 /**
@@ -31,54 +32,53 @@ class KNearestNeighbors extends Supervised implements InstanceBasedLearningInter
     {
         $columns = $this->trainingData->columns;
 
-        foreach ($this->testData->data as $test_row_key => $test_row) {
-            $nearestNeighbors = $this->findNearestNeighbors($test_row);
+        foreach ($this->testData->vectors as $vector) {
+            $nearestNeighbors = $this->findNearestNeighbors($vector);
             $classified = array();
 
             if ($this->method == 'regression') {
                 foreach ($columns as $key => $column) {
-                    if ($column->datatype == 'numeric') {
-                        $classified[$key] = $this->mean(array_column($nearestNeighbors, $key));
+                    if ($column->isNumeric()) {
+                        $classified[$key] = $this->mean($nearestNeighbors->column($key));
                     }
                 }
             } else {
                 foreach ($columns as $key => $column) {
-                    if ($column->datatype == 'numeric') {
-                        $majority = $this->majority(array_column($nearestNeighbors, $key));
+                    if ($column->isNumeric()) {
+                        $majority = $this->majority($nearestNeighbors->column($key));
                     }
                 }
             }
 
-            $this->testData->data[$test_row_key]['kNearestNeighbors'] = $nearestNeighbors;
-            $this->testData->data[$test_row_key]['classified'] = $classified;
+            $vector->classify($classified);
         }
     }
 
     /**
      * Find the K nearest neighbors of the given rows.
      */
-    private function findNearestNeighbors($test_row)
+    private function findNearestNeighbors($vector)
     {
-        $nearestNeighbors = array();
+        $nearestNeighbors = new Subset();
         $distances = array();
-        $training_data = $this->trainingData->data;
+        $training_vectors = $this->trainingData->vectors;
 
         // Calculate the eucledian distance from the test_row to each row in the training data.
-        foreach ($training_data as $training_row_key => $training_row) {
-            $distance = $this->euclideanDistance($test_row, $training_row);
-            if ($this->distance_boosting) {
+        foreach ($training_vectors as $training_vector_key => $training_vector) {
+            $distance = $this->euclideanDistance($vector->values, $training_vector->values);
+            if ($distance != 0 && $this->distance_boosting) {
                 $distance -= (1 / $distance);
             }
-            $distances[$training_row_key] = $distance;
+            $distances[$training_vector_key] = $distance;
         }
 
         // Order the distances form low to hight.
         asort($distances);
 
         // Pick the top ones with the shortest distance.
-        $training_row_keys = array_keys(array_slice($distances, 0, $this->num_nearest_neighbors, true));
-        foreach ($training_row_keys as $training_row_key) {
-            $nearestNeighbors[$training_row_key] = $training_data[$training_row_key];
+        $keys = array_keys(array_slice($distances, 0, $this->num_nearest_neighbors, true));
+        foreach ($keys as $key) {
+            $nearestNeighbors->addVector($key, $training_vectors[$key]);
         }
 
         return $nearestNeighbors;

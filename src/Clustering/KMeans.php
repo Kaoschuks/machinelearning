@@ -28,9 +28,9 @@ class KMeans extends Cluster implements LearningInterface
     /**
      * Add trainings data to train the clusters.
      */
-    public function addTrainingData(Dataset $dataset)
+    public function setTrainingData(Dataset $dataset)
     {
-        parent::addTrainingData($dataset);
+        parent::setTrainingData($dataset);
         $this->initialization();
     }
 
@@ -43,9 +43,9 @@ class KMeans extends Cluster implements LearningInterface
 
       // Keep on training until convergion.
       do {
-          foreach ($this->trainingData->data as $row_key => $row) {
-              $nearestClusterKey = $this->getNearestCluster($row);
-              $this->clusters[$nearestClusterKey]['data'][$row_key] = $row;
+          foreach ($this->trainingData->vectors as $key => $vector) {
+              $nearestClusterKey = $this->getNearestCluster($vector);
+              $this->clusters[$nearestClusterKey]['data'][$key] = $vector;
           }
           $this->updateClusters($converged);
       } while (!$converged);
@@ -56,8 +56,8 @@ class KMeans extends Cluster implements LearningInterface
      */
     public function test()
     {
-        foreach ($this->testData->data as $row_key => $row) {
-            $this->testData->data[$row_key]['cluster'] = $this->getNearestCluster($row);
+        foreach ($this->testData->vectors as $key => $vector) {
+            $this->testData->vectors[$key]['cluster'] = $this->getNearestCluster($vector);
         }
     }
 
@@ -68,32 +68,32 @@ class KMeans extends Cluster implements LearningInterface
     {
         $columns = $this->trainingData->columns;
         for ($cluster_key = 1; $cluster_key <= $this->num_clusters; $cluster_key++) {
-            $centroids = array();
+            $centroid = array();
 
-            // Pick k random rows for initial centroids.
+            // Pick k random rows for initial centroid.
             if ($this->initialization_method == 'forgy') {
-                $row = array_rand($this->trainingData->data);
+                $vector = array_rand($this->trainingData->vectors);
                 foreach ($columns as $key => $column) {
-                    if ($column->datatype == 'numeric') {
-                        $centroids[$key] = $row[$key];
+                    if ($column->isNumeric()) {
+                        $centroid[$key] = $vector->values[$key];
                     }
                 }
             }
 
-            // Pick random centroids between the colomn max and min.
+            // Pick random centroid between the colomn max and min.
             else {
                 foreach ($columns as $key => $column) {
-                    if ($column->datatype == 'numeric') {
-                        $centroids[$key] = $this->rand($column->data['min'], $column->data['max']);
+                    if ($column->isNumeric()) {
+                        $centroid[$key] = $this->rand($column->data['min'], $column->data['max']);
                     }
                 }
             }
-            $this->clusters[$cluster_key]['centroids'] = $centroids;
+            $this->clusters[$cluster_key]['centroid'] = $centroid;
         }
     }
 
     /**
-     * Update the cluster centroids for the next iteration, or mark the clusters as converged.
+     * Update the cluster centroid for the next iteration, or mark the clusters as converged.
      */
     private function updateClusters(&$converged)
     {
@@ -101,27 +101,27 @@ class KMeans extends Cluster implements LearningInterface
         $columns = $this->trainingData->columns;
 
         foreach ($this->clusters as $cluster_key => $cluster) {
-            $old_centroids = $this->clusters[$cluster_key]['centroids'];
-            $centroids = array();
+            $old_centroid = $this->clusters[$cluster_key]['centroid'];
+            $centroid = array();
 
             // No data available, thus noting to update.
             if (!@$cluster['data']) {
                 continue;
             }
 
-            // Pick new random centroids based on the subset.
+            // Pick new random centroid based on the subset.
             foreach ($cluster['data'] as $row_key => $row) {
                 foreach ($row as $key => $value) {
-                    if ($columns[$key]->datatype == 'numeric') {
+                    if ($columns[$key]->isNumeric()) {
                         $values = array_column($cluster['data'], $key);
-                        $centroids[$key] = $this->mean($values);
+                        $centroid[$key] = $this->mean($values);
                     }
                 }
             }
 
-            // Update the centroids, and remove the subset.
-            $this->clusters[$cluster_key]['centroids'] = $centroids;
-            $distance += $this->euclideanDistance($old_centroids, $centroids);
+            // Update the centroid, and remove the subset.
+            $this->clusters[$cluster_key]['centroid'] = $centroid;
+            $distance += $this->euclideanDistance($old_centroid, $centroid);
             unset($this->clusters[$cluster_key]['data']);
         }
 
@@ -131,18 +131,18 @@ class KMeans extends Cluster implements LearningInterface
     /**
      * Get the nearest cluster based on the give row.
      */
-    private function getNearestCluster($row)
+    private function getNearestCluster($vector)
     {
         $columns = $this->trainingData->columns;
         $leastWcss = PHP_INT_MAX;
         $nearestClusterKey = null;
 
-        // Calculate the distance from the the centroids.
+        // Calculate the distance from the the centroid.
         foreach ($this->clusters as $cluster_key => $cluster) {
             $wcss = 0;
-            foreach ($row as $key => $value) {
-                if ($columns[$key]->datatype == 'numeric') {
-                    $wcss += pow($value - $cluster['centroids'][$key], 2);
+            foreach ($vector->values as $key => $value) {
+                if ($columns[$key]->isNumeric()) {
+                    $wcss += pow($value - $cluster['centroid'][$key], 2);
                 }
             }
             if ($wcss < $leastWcss) {

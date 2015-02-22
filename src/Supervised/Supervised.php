@@ -7,7 +7,7 @@ use MachineLearning\Interfaces\ControllerInterface;
 use MachineLearning\Data\Dataset;
 
 /**
- * Base class for the clustering algortims.
+ * Base class for the supervised algortims.
  */
 class Supervised extends MachineLearning implements ControllerInterface
 {
@@ -17,25 +17,25 @@ class Supervised extends MachineLearning implements ControllerInterface
     public $testData;
 
     /**
-     * Add trainings data to train the clusters.
+     * Add trainings data..
      */
-    public function addTrainingData(Dataset $dataset)
+    public function setTrainingData(Dataset $dataset)
     {
         $this->trainingData = $dataset;
     }
 
     /**
-     * Add validation data to validate the clusters.
+     * set validation data.
      */
-    public function addValidationData(Dataset $dataset)
+    public function setValidationData(Dataset $dataset)
     {
         $this->validationData = $dataset;
     }
 
     /**
-     * Add test data.
+     * set test data.
      */
-    public function addTestData(Dataset $dataset)
+    public function setTestData(Dataset $dataset)
     {
         $this->testData = $dataset;
     }

@@ -18,25 +18,25 @@ class Cluster extends MachineLearning implements ControllerInterface
     public $clusters;
 
     /**
-     * Add trainings data to train the clusters.
+     * set trainings data.
      */
-    public function addTrainingData(Dataset $dataset)
+    public function setTrainingData(Dataset $dataset)
     {
         $this->trainingData = $dataset;
     }
 
     /**
-     * Add validation data to validate the clusters.
+     * set validation data.
      */
-    public function addValidationData(Dataset $dataset)
+    public function setValidationData(Dataset $dataset)
     {
         $this->validationData = $dataset;
     }
 
     /**
-     * Add test data.
+     * set test data.
      */
-    public function addTestData(Dataset $dataset)
+    public function setTestData(Dataset $dataset)
     {
         $this->testData = $dataset;
     }
