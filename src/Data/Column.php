@@ -2,53 +2,66 @@
 
 namespace MachineLearning\Data;
 
-use MachineLearning\MachineLearning;
-
 /**
  * A column class for fetching column specific data.
  */
-class Column extends MachineLearning
+class Column
 {
-
-    public $key;
-    public $values;
-    public $datatype;
-    public $data;
+    private $values;
+    private $datatype;
 
     /**
-     * Basic constructor.
+     * Set the values.
      */
-    public function __construct($key, $values)
+    public function setValues($values)
     {
-        $this->key = $key;
         $this->values = $values;
-        $this->datatype = $this->getType($values);
-
-        if ($this->datatype == 'numeric') {
-            $this->data = $this->getDefaultStatistics($values);
-        }
-    }
-
-    public function isNumeric()
-    {
-        return $this->datatype == 'numeric';
+        $this->setDataType();
     }
 
     /**
-     * Get the column type.
+     * Get the values.
      */
-    private function getType($values)
+    public function getValues()
     {
-        $types = array_count_values(array_filter(array_map('gettype', $values), function ($value) {
+        return $this->values;
+    }
+
+    /**
+     * Set the datatype.
+     */
+    private function setDataType()
+    {
+        $types = array_count_values(array_filter(array_map('gettype', $this->values), function ($value) {
           return $value != 'NULL';
         }));
-        arsort($types);
-        $type = reset(array_flip($types));
 
-        if (in_array($type, array('double'))) {
-            return 'numeric';
-        } elseif ($type == 'string') {
-            return 'string';
-        }
+        // Sort the type counts, highest first.
+        arsort($types);
+
+        // Get the type width the highest count.
+        $this->datatype = reset(array_flip($types));
+
+        // if (in_array($type, array('double'))) {
+        //     $this->datatype = 'numeric';
+        // } elseif ($type == 'string') {
+        //     $this->datatype = 'string';
+        // }
+    }
+
+    /**
+     * Get the datatype.
+     */
+    public function getDataType()
+    {
+        return $this->datatype;
+    }
+
+    /**
+     * Check if the column is numeric.
+     */
+    public function isNumeric()
+    {
+      return in_array($this->datatype, array('double'));
     }
 }

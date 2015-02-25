@@ -30,27 +30,26 @@ class KNearestNeighbors extends Supervised implements InstanceBasedLearningInter
      */
     public function test()
     {
-        $columns = $this->trainingData->columns;
-
-        foreach ($this->testData->vectors as $vector) {
+        foreach ($this->testData->getVectors() as $vector) {
             $nearestNeighbors = $this->findNearestNeighbors($vector);
-            $classified = array();
+            // print_r($nearestNeighbors);
+            $class = array();
 
             if ($this->method == 'regression') {
-                foreach ($columns as $key => $column) {
+                foreach ($this->trainingData->getColumns() as $key => $column) {
                     if ($column->isNumeric()) {
-                        $classified[$key] = $this->mean($nearestNeighbors->column($key));
+                        $class[$key] = $this->mean($nearestNeighbors->getColumn($key)->getValues());
                     }
                 }
             } else {
                 foreach ($columns as $key => $column) {
                     if ($column->isNumeric()) {
-                        $majority = $this->majority($nearestNeighbors->column($key));
+                        $majority = $this->majority($nearestNeighbors->getColumn($key)->getValues());
                     }
                 }
             }
 
-            $vector->classify($classified);
+            $vector->setClass($class);
         }
     }
 
@@ -61,11 +60,10 @@ class KNearestNeighbors extends Supervised implements InstanceBasedLearningInter
     {
         $nearestNeighbors = new Subset();
         $distances = array();
-        $training_vectors = $this->trainingData->vectors;
 
         // Calculate the eucledian distance from the test_row to each row in the training data.
-        foreach ($training_vectors as $training_vector_key => $training_vector) {
-            $distance = $this->euclideanDistance($vector->values, $training_vector->values);
+        foreach ($this->trainingData->getVectors() as $training_vector_key => $training_vector) {
+            $distance = $this->euclideanDistance($vector->getValues(), $training_vector->getValues());
             if ($distance != 0 && $this->distance_boosting) {
                 $distance -= (1 / $distance);
             }
@@ -77,9 +75,11 @@ class KNearestNeighbors extends Supervised implements InstanceBasedLearningInter
 
         // Pick the top ones with the shortest distance.
         $keys = array_keys(array_slice($distances, 0, $this->num_nearest_neighbors, true));
+        $data = array();
         foreach ($keys as $key) {
-            $nearestNeighbors->addVector($key, $training_vectors[$key]);
+            $data[$key] = $this->trainingData->getVector($key)->getValues();
         }
+        $nearestNeighbors->addData($data);
 
         return $nearestNeighbors;
     }

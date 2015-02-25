@@ -2,29 +2,43 @@
 
 namespace MachineLearning\Data;
 
-use MachineLearning\MachineLearning;
-
 /**
- * A column class for fetching vector specific data.
+ * A vector class for fetching vector specific data.
  */
-class Vector extends MachineLearning
+class Vector
 {
-    public $values;
-    public $classified;
+    private $values;
+    private $class;
 
     /**
      * Set the values.
      */
     public function setValues($values)
     {
-      $this->values = $values;
+        $this->values = $values;
     }
 
     /**
-     * Set the classified.
+     * Get the values.
      */
-    public function classify($classified)
+    public function getValues()
     {
-      $this->classified = $classified;
+        return $this->values;
+    }
+
+    /**
+     * Set the class.
+     */
+    public function setClass($class)
+    {
+        $this->class = $class;
+    }
+
+    /**
+     * Get the class.
+     */
+    public function getClass()
+    {
+        return $this->class;
     }
 }

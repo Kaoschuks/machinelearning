@@ -16,4 +16,4 @@ $cluster->setTrainingData($training_data);
 $cluster->setTestData($test_data);
 $cluster->test();
 
-print_r($cluster->testData->vectors);
+print_r($cluster->testData->getVectors());
