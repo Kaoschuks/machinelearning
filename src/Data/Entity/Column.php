@@ -1,6 +1,8 @@
 <?php
 
-namespace MachineLearning\Data;
+namespace MachineLearning\Data\Entity;
+
+use MachineLearning\MachineLearning;
 
 /**
  * A column class for fetching column specific data.
@@ -41,12 +43,6 @@ class Column
 
         // Get the type width the highest count.
         $this->datatype = reset(array_flip($types));
-
-        // if (in_array($type, array('double'))) {
-        //     $this->datatype = 'numeric';
-        // } elseif ($type == 'string') {
-        //     $this->datatype = 'string';
-        // }
     }
 
     /**
@@ -55,6 +51,14 @@ class Column
     public function getDataType()
     {
         return $this->datatype;
+    }
+
+    /**
+     * Get the default statistics.
+     */
+    public function getStats()
+    {
+        return $this->getDefaultStatistics($this->values);
     }
 
     /**

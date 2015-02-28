@@ -18,6 +18,9 @@
     "issues": "https://github.com/willembressers/machinelearning/issues",
     "source": "https://github.com/willembressers/machinelearning"
   },
+  "require": {
+    "symfony/yaml": "2.6.*"
+  },
   "autoload": {
     "psr-4": {
       "MachineLearning\\": "src"

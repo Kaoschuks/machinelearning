@@ -1,9 +1,9 @@
 <?php
 
-namespace MachineLearning\Data;
+namespace MachineLearning\Data\Entity;
 
-use MachineLearning\Data\Column;
-use MachineLearning\Data\Vector;
+use MachineLearning\Data\Entity\Column;
+use MachineLearning\Data\Entity\Vector;
 
 /**
  * Sub class for the data management.

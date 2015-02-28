@@ -1,13 +1,9 @@
 <?php
 
-namespace MachineLearning;
+namespace MachineLearning\Utility\Controller;
 
-/**
- * Basic Machine learning utility class.
- */
-class MachineLearning
+class BaseController
 {
-
     /**
      * Get the default statistics of an array.
      */

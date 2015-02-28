@@ -2,27 +2,24 @@
 
 namespace MachineLearning\Clustering;
 
-use MachineLearning\Interfaces\LearningInterface;
+use MachineLearning\MachineLearningConfiguration;
 use MachineLearning\Data\Dataset;
 
 /**
  * Cluster the data, based on the KMeans approach.
  */
-class KMeans extends Cluster implements LearningInterface
+class KMeans
 {
-
-    public $num_clusters;
-    public $convergion_distance;
-    public $initialization_method;
+    public $config;
 
     /**
-     * Basic constructor.
+     * Specify the basic configuration.
      */
-    public function __construct($num_clusters = 3, $convergion_distance = 1, $initialization_method = 'random')
-    {
-        $this->num_clusters = $num_clusters;
-        $this->convergion_distance = $convergion_distance;
-        $this->initialization_method = $initialization_method;
+    public function __construct() {
+        $this->config = new ConfigurationController();
+        $this->config->numClusters = 3;
+        $this->config->convergionDistance = 1;
+        $this->config->initializationMethod = 'random';
     }
 
     /**
@@ -30,7 +27,7 @@ class KMeans extends Cluster implements LearningInterface
      */
     public function setTrainingData(Dataset $dataset)
     {
-        parent::setTrainingData($dataset);
+        $this->trainingData = $dataset;
         $this->initialization();
     }
 
@@ -43,7 +40,7 @@ class KMeans extends Cluster implements LearningInterface
 
       // Keep on training until convergion.
       do {
-          foreach ($this->trainingData->vectors as $key => $vector) {
+          foreach ($this->trainingData->getVectors() as $key => $vector) {
               $nearestClusterKey = $this->getNearestCluster($vector);
               $this->clusters[$nearestClusterKey]['data'][$key] = $vector;
           }
@@ -56,7 +53,7 @@ class KMeans extends Cluster implements LearningInterface
      */
     public function test()
     {
-        foreach ($this->testData->vectors as $key => $vector) {
+        foreach ($this->testData->getVectors() as $key => $vector) {
             $this->testData->vectors[$key]['cluster'] = $this->getNearestCluster($vector);
         }
     }
@@ -66,25 +63,25 @@ class KMeans extends Cluster implements LearningInterface
      */
     private function initialization()
     {
-        $columns = $this->trainingData->columns;
-        for ($cluster_key = 1; $cluster_key <= $this->num_clusters; $cluster_key++) {
+        for ($cluster_key = 1; $cluster_key <= $this->config->numClusters; $cluster_key++) {
             $centroid = array();
 
             // Pick k random rows for initial centroid.
-            if ($this->initialization_method == 'forgy') {
-                $vector = array_rand($this->trainingData->vectors);
-                foreach ($columns as $key => $column) {
+            if ($this->config->initializationMethod == 'forgy') {
+                $vector = array_rand($this->trainingData->getVectors());
+                foreach ($this->trainingData->getColumns() as $key => $column) {
                     if ($column->isNumeric()) {
-                        $centroid[$key] = $vector->values[$key];
+                        $centroid[$key] = $vector->getValue($key);
                     }
                 }
             }
 
             // Pick random centroid between the colomn max and min.
             else {
-                foreach ($columns as $key => $column) {
+                foreach ($this->trainingData->getColumns() as $key => $column) {
                     if ($column->isNumeric()) {
-                        $centroid[$key] = $this->rand($column->data['min'], $column->data['max']);
+                        $stats = $column->getStats();
+                        $centroid[$key] = $this->rand($stats['min'], $stats['max']);
                     }
                 }
             }
@@ -98,7 +95,7 @@ class KMeans extends Cluster implements LearningInterface
     private function updateClusters(&$converged)
     {
         $distance = 0;
-        $columns = $this->trainingData->columns;
+        print_r($this->clusters);
 
         foreach ($this->clusters as $cluster_key => $cluster) {
             $old_centroid = $this->clusters[$cluster_key]['centroid'];
@@ -109,15 +106,15 @@ class KMeans extends Cluster implements LearningInterface
                 continue;
             }
 
-            // Pick new random centroid based on the subset.
-            foreach ($cluster['data'] as $row_key => $row) {
-                foreach ($row as $key => $value) {
-                    if ($columns[$key]->isNumeric()) {
-                        $values = array_column($cluster['data'], $key);
-                        $centroid[$key] = $this->mean($values);
-                    }
-                }
-            }
+            // // Pick new random centroid based on the subset.
+            // foreach ($cluster['data'] as $row_key => $row) {
+            //     foreach ($row as $key => $value) {
+            //         if ($this->trainingData->getColumn($key)->isNumeric()) {
+            //             $values = array_column($cluster['data'], $key);
+            //             $centroid[$key] = $this->mean($values);
+            //         }
+            //     }
+            // }
 
             // Update the centroid, and remove the subset.
             $this->clusters[$cluster_key]['centroid'] = $centroid;
@@ -125,7 +122,7 @@ class KMeans extends Cluster implements LearningInterface
             unset($this->clusters[$cluster_key]['data']);
         }
 
-        $converged = $distance <= $this->convergion_distance ? true : false;
+        $converged = $distance <= $this->config->convergionDistance ? true : false;
     }
 
     /**
@@ -133,15 +130,14 @@ class KMeans extends Cluster implements LearningInterface
      */
     private function getNearestCluster($vector)
     {
-        $columns = $this->trainingData->columns;
         $leastWcss = PHP_INT_MAX;
         $nearestClusterKey = null;
 
         // Calculate the distance from the the centroid.
         foreach ($this->clusters as $cluster_key => $cluster) {
             $wcss = 0;
-            foreach ($vector->values as $key => $value) {
-                if ($columns[$key]->isNumeric()) {
+            foreach ($vector->getValues() as $key => $value) {
+                if ($this->trainingData->getColumn($key)->isNumeric()) {
                     $wcss += pow($value - $cluster['centroid'][$key], 2);
                 }
             }

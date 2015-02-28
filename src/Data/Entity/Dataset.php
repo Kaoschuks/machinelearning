@@ -1,26 +1,30 @@
 <?php
 
-namespace MachineLearning\Data;
+namespace MachineLearning\Data\Entity;
 
-use MachineLearning\Data\Subset;
+use MachineLearning\Data\Entity\Subset;
+use MachineLearning\Utility\Entity\Config;
 
 /**
  * Base class for the data handling.
  */
 class Dataset extends Subset
 {
-    private $data;
+    const CLASSNAME = 'Dataset';
+
     private $config;
 
-    /**
-     * Specify the basic configuration.
-     */
-    public function __construct($config = array()) {
-        $this->config = $config + array(
-            'removeMissingValues' => true,
-            'normalizeData' => false,
-            'shuffleData' => true,
-        );
+    public function __construct(Config $config, $data = array()) {
+        $this->config = $config;
+        $this->config->set(self::CLASSNAME, array(
+            'remove.missing.values' => true,
+            'normalize.data' => false,
+            'shuffle.data' => true,
+        ));
+
+        if (!empty($data)) {
+            $this->addData($data);
+        }
     }
 
     /**
@@ -28,18 +32,20 @@ class Dataset extends Subset
      */
     public function addData($data)
     {
+        $config = $this->config->get(self::CLASSNAME);
+
         // Remove rows with missing values.
-        if ($this->config['removeMissingValues']) {
+        if ($config['remove.missing.values']) {
             $data = $this->missing($data);
         }
 
         // Normalize the numeric values.
-        if ($this->config['normalizeData']) {
+        if ($config['normalize.data']) {
             $data = $this->normalize($data);
         }
 
         // Randomize the data.
-        if ($this->config['shuffleData']) {
+        if ($config['shuffle.data']) {
             shuffle($data);
         }
 
@@ -107,7 +113,7 @@ class Dataset extends Subset
     private function subset($start, $end)
     {
         $config = $this->config;
-        $config['shuffleData'] = false;
+        $config->set(self::CLASSNAME, array('shuffle.data' => false));
         $data = array_slice($this->data, $start, $end, true);
 
         $subset = new Dataset($config);
