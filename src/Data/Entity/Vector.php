@@ -2,12 +2,12 @@
 
 namespace MachineLearning\Data\Entity;
 
-use MachineLearning\MachineLearning;
+use MachineLearning\Utility\Controller\BaseController;
 
 /**
  * A vector class for fetching vector specific data.
  */
-class Vector
+class Vector extends BaseController
 {
     private $values;
     private $class;
@@ -65,6 +65,6 @@ class Vector
      */
     public function getStats()
     {
-        return MachineLearning::DefaultStatistics($this->values);
+        return $this->getDefaultStatistics($this->values);
     }
 }

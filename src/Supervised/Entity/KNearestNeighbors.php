@@ -3,7 +3,7 @@
 namespace MachineLearning\Supervised\Entity;
 
 use MachineLearning\Supervised\Controller\KNearestNeighborsController;
-use MachineLearning\Supervised\Model\InstanceBasedLearningModel;
+use MachineLearning\Utility\Model\InstanceBasedLearningModel;
 use MachineLearning\Utility\Entity\Config;
 use MachineLearning\Data\Entity\Dataset;
 // use MachineLearning\Interfaces\InstanceBasedLearningInterface;

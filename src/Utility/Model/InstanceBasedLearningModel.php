@@ -1,6 +1,6 @@
 <?php
 
-namespace MachineLearning\Supervised\Model;
+namespace MachineLearning\Utility\Model;
 
 use MachineLearning\Data\Entity\Dataset;
 

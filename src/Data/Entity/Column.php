@@ -2,12 +2,12 @@
 
 namespace MachineLearning\Data\Entity;
 
-use MachineLearning\MachineLearning;
+use MachineLearning\Utility\Controller\BaseController;
 
 /**
  * A column class for fetching column specific data.
  */
-class Column
+class Column extends BaseController
 {
     private $values;
     private $datatype;

@@ -29,6 +29,8 @@ class Subset
         if (!$this->getVector($key)) {
             $this->vectors[$key] = new Vector();
             $this->vectors[$key]->setValues($values);
+        } else {
+            $this->vectors[$key]->setValues(array_merge($values, $this->vectors[$key]->getValues()));
         }
     }
 
@@ -44,9 +46,7 @@ class Subset
      */
     public function setVectors($data) {
         foreach ($data as $key => $values) {
-            if (!$this->getVector($key)) {
-                $this->setVector($key, $values);
-            }
+            $this->setVector($key, $values);
         }
     }
 
@@ -64,6 +64,8 @@ class Subset
         if (!$this->getColumn($key)) {
             $this->columns[$key] = new Column();
             $this->columns[$key]->setValues($values);
+        } else {
+            $this->columns[$key]->setValues(array_merge($values, $this->columns[$key]->getValues()));
         }
     }
 
@@ -80,9 +82,7 @@ class Subset
     public function setColumns($data) {
         foreach ($data as $row_key => $values) {
             foreach ($values as $column_key => $value) {
-                if (!$this->getColumn($column_key)) {
-                    $this->setcolumn($column_key, array_column($data, $column_key));
-                }
+                $this->setcolumn($column_key, array_column($data, $column_key));
             }
         }
     }
