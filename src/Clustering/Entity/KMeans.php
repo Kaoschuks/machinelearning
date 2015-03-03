@@ -12,29 +12,45 @@ use MachineLearning\Data\Entity\Dataset;
  */
 class KMeans extends KMeansController implements BaseLearningModel
 {
-    const CLASSNAME = 'KMeans';
-
     private $config;
     private $trainingData;
     public $testData;
 
-    public function __construct(Config $config) {
-        $this->config = $config;
-        $this->config->set(self::CLASSNAME, array(
+    /**
+     * Set the configuration.
+     */
+    public function setConfig(Config $config)
+    {
+        $config->set('KMeans', array(
             'num.clusters' => 3,
             'convergion.distance' => 1,
             'initialization.method' => 'random',
         ));
+        $this->config = $config;
     }
 
+    /**
+     * Get the configuration.
+     */
+    public function getConfig()
+    {
+        return $this->config->get('KMeans');
+    }
+
+    /**
+     * Set the training data.
+     */
     public function setTrainingData(Dataset $dataset)
     {
         $this->trainingData = $dataset;
+        $config = $this->getConfig();
 
-        $config = $this->config->get(self::CLASSNAME);
         $this->initialization($config, $dataset);
     }
 
+    /**
+     * Set the test data.
+     */
     public function setTestData(Dataset $dataset)
     {
         $this->testData = $dataset;
@@ -46,13 +62,12 @@ class KMeans extends KMeansController implements BaseLearningModel
     public function train()
     {
         $converged = false;
-        $dataset = $this->trainingData;
-        $config = $this->config->get(self::CLASSNAME);
+        $config = $this->getConfig();
 
       // Keep on training until convergion.
       do {
           foreach ($this->trainingData->getVectors() as $key => $vector) {
-              $nearestCluster = $this->getNearestCluster($vector, $dataset);
+              $nearestCluster = $this->getNearestCluster($vector);
 
               // @TODO fix this adddata it takes to much time.
               $nearestCluster->addData(array($key => $vector->getValues()));
@@ -66,9 +81,8 @@ class KMeans extends KMeansController implements BaseLearningModel
      */
     public function test()
     {
-        $dataset = $this->trainingData;
         foreach ($this->testData->getVectors() as $key => $vector) {
-            $vector->setClass($this->getNearestCluster($vector, $dataset));
+            $vector->setClass($this->getNearestCluster($vector));
         }
     }
 }

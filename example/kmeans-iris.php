@@ -1,19 +1,23 @@
 <?php
 
+$pwd = dirname(__FILE__);
+
 require '../vendor/autoload.php';
+require_once $pwd . "/datasets/iris.php";
 
 use MachineLearning\Utility\Entity\Config;
 use MachineLearning\Data\Entity\Dataset;
 use MachineLearning\Clustering\Entity\KMeans;
 
-require_once dirname(__FILE__) . "/datasets/iris.php";
+$config = new Config();
+$config->load($pwd . "/kmeans-iris-config.yml");
 
-$config = new Config(dirname(__FILE__) . "/kmeans-iris-config.yml");
+$dataset = new Dataset();
+$dataset->setConfig($config);
+$dataset->addData($data);
 
-$dataset = new Dataset($config, $data);
-
-$cluster = new KMeans($config);
+$cluster = new KMeans();
+$cluster->setConfig($config);
 $cluster->setTrainingData($dataset);
 $cluster->train();
-
-print_r($cluster->clusters[1]->getCentroid());
+$cluster->save($pwd . '/kmeans.clusters.yml');

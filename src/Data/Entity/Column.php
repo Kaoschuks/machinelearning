@@ -34,15 +34,23 @@ class Column extends BaseController
      */
     private function setDataType()
     {
-        $types = array_count_values(array_filter(array_map('gettype', $this->values), function ($value) {
-          return $value != 'NULL';
-        }));
+        $values = $this->values;
 
-        // Sort the type counts, highest first.
-        arsort($types);
+        if (is_array($values)) {
+            $types = array_count_values(array_filter(array_map('gettype', $values), function ($value) {
+              return $value != 'NULL';
+            }));
 
-        // Get the type width the highest count.
-        $this->datatype = reset(array_flip($types));
+            // Sort the type counts, highest first.
+            arsort($types);
+
+            // Get the type width the highest count.
+            $datatype = reset(array_flip($types));
+        } else {
+            $datatype = gettype($values);
+        }
+
+        $this->datatype = $datatype;
     }
 
     /**

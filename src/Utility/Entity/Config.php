@@ -2,39 +2,42 @@
 
 namespace MachineLearning\Utility\Entity;
 
-use Symfony\Component\Yaml\Parser;
-use Symfony\Component\Yaml\Exception\ParseException;
+use MachineLearning\Utility\Controller\BaseController;
+use MachineLearning\Utility\Model\BaseControllerModel;
 
 /**
  *
  */
-class Config
+class Config extends BaseController implements BaseControllerModel
 {
     private $values;
-    private $path;
 
-    public function __construct($path)
+    /**
+     * Load the speficied config file.
+     */
+    public function load($path = 'config.yml')
     {
-        $this->path = $path;
-        $this->load();
+        $this->values = $this->import($path);
     }
 
-    public function load()
+    /**
+     * Save the $values to the given path.
+     */
+    public function save($path = 'config.yml')
     {
-        $yaml = new Parser();
-        try {
-            if (file_exists($this->path)) {
-                $this->values = $yaml->parse(file_get_contents($this->path));
-            }
-        } catch (ParseException $e) {
-            printf("Unable to parse the YAML string: %s", $e->getMessage());
-        }
+        $this->export($this->values, $this->path);
     }
 
+    /**
+     * Set the configuration for a given class.
+     */
     public function set($classname, $values) {
         $this->values[$classname] = array_merge($values, $this->get($classname));
     }
 
+    /**
+     * Get the configuration for a given class.
+     */
     public function get($classname) {
         return isset($this->values[$classname]) ? $this->values[$classname] : array();
     }

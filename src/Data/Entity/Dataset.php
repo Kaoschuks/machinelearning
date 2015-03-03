@@ -10,21 +10,27 @@ use MachineLearning\Utility\Entity\Config;
  */
 class Dataset extends Subset
 {
-    const CLASSNAME = 'Dataset';
-
     private $config;
 
-    public function __construct(Config $config, $data = array()) {
-        $this->config = $config;
-        $this->config->set(self::CLASSNAME, array(
+    /**
+     * Set the configuration.
+     */
+    public function setConfig(Config $config)
+    {
+        $config->set('Dataset', array(
             'remove.missing.values' => true,
             'normalize.data' => false,
             'shuffle.data' => true,
         ));
+        $this->config = $config;
+    }
 
-        if (!empty($data)) {
-            $this->addData($data);
-        }
+    /**
+     * Get the configuration.
+     */
+    public function getConfig()
+    {
+        return $this->config->get('Dataset');
     }
 
     /**
@@ -32,7 +38,7 @@ class Dataset extends Subset
      */
     public function addData($data)
     {
-        $config = $this->config->get(self::CLASSNAME);
+        $config = $this->getConfig();
 
         // Remove rows with missing values.
         if ($config['remove.missing.values']) {
@@ -113,10 +119,11 @@ class Dataset extends Subset
     private function subset($start, $end)
     {
         $config = $this->config;
-        $config->set(self::CLASSNAME, array('shuffle.data' => false));
+        $config->set('Dataset', array('shuffle.data' => false));
         $data = array_slice($this->data, $start, $end, true);
 
-        $subset = new Dataset($config);
+        $subset = new Dataset();
+        $subset->setConfig($config);
         $subset->addData($data);
 
         return $subset;

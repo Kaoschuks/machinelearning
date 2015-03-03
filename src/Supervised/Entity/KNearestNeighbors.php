@@ -13,26 +13,42 @@ use MachineLearning\Data\Entity\Dataset;
  */
 class KNearestNeighbors extends KNearestNeighborsController implements InstanceBasedLearningModel
 {
-    const CLASSNAME = 'KNearestNeighbors';
-
     private $config;
     private $trainingData;
     public $testData;
 
-    public function __construct(Config $config) {
-        $this->config = $config;
-        $this->config->set(self::CLASSNAME, array(
+    /**
+     * Set the configuration.
+     */
+    public function setConfig(Config $config)
+    {
+        $config->set('KNearestNeighbors', array(
             'num.nearest.neighbors' => 3,
             'method' => 'random',
             'distance.boosting' => true,
         ));
+        $this->config = $config;
     }
 
+    /**
+     * Get the configuration.
+     */
+    public function getConfig()
+    {
+        return $this->config->get('KNearestNeighbors');
+    }
+
+    /**
+     * Set the training data.
+     */
     public function setTrainingData(Dataset $dataset)
     {
         $this->trainingData = $dataset;
     }
 
+    /**
+     * Set the test data.
+     */
     public function setTestData(Dataset $dataset)
     {
         $this->testData = $dataset;
@@ -43,8 +59,7 @@ class KNearestNeighbors extends KNearestNeighborsController implements InstanceB
      */
     public function test()
     {
-        $config = $this->config->get(self::CLASSNAME);
-        $columns = $this->trainingData->getColumns();
+        $config = $this->getConfig();
         $trainingVectors = $this->trainingData->getVectors();
         $testVectors = $this->testData->getVectors();
 
@@ -53,17 +68,17 @@ class KNearestNeighbors extends KNearestNeighborsController implements InstanceB
             $class = array();
 
             if ($config['method'] == 'regression') {
-                foreach ($columns as $key => $column) {
+                foreach ($testVector->getColumns() as $key => $column) {
                     if ($column->isNumeric()) {
                         $class[$key] = $this->mean($nearestNeighbors->getColumn($key)->getValues());
                     }
                 }
-            } else {
-                foreach ($columns as $key => $column) {
-                    if ($column->isNumeric()) {
-                        $majority = $this->majority($nearestNeighbors->getColumn($key)->getValues());
-                    }
-                }
+            // } else {
+            //     foreach ($testVector->getColumns() as $key => $column) {
+            //         if ($column->isNumeric()) {
+            //             $majority = $this->majority($nearestNeighbors->getColumn($key)->getValues());
+            //         }
+            //     }
             }
 
             $testVector->setClass($class);

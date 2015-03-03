@@ -2,12 +2,13 @@
 
 namespace MachineLearning\Data\Entity;
 
-use MachineLearning\Utility\Controller\BaseController;
+use MachineLearning\Data\Controller\ColumnController;
+use MachineLearning\Data\Entity\Column;
 
 /**
  * A vector class for fetching vector specific data.
  */
-class Vector extends BaseController
+class Vector extends ColumnController
 {
     private $values;
     private $class;
@@ -17,7 +18,9 @@ class Vector extends BaseController
      */
     public function setValues($values)
     {
-        $this->values = $values;
+        foreach ($values as $key => $value) {
+            $this->setValue($key, $value);
+        }
     }
 
     /**
@@ -31,9 +34,10 @@ class Vector extends BaseController
     /**
      * Set the value.
      */
-    public function setValue($key, $values)
+    public function setValue($key, $value)
     {
         $this->values[$key] = $value;
+        $this->setColumn($key, $value);
     }
 
     /**

@@ -13,14 +13,24 @@ class KMeansController extends BaseController implements BaseControllerModel
 {
     public $clusters;
 
-    public function load()
+    /**
+     * Load the stored clusters.
+     */
+    public function load($path = 'KMeans.yml')
     {
-
+        $this->clusters = $this->import($path);
     }
 
-    public function save()
+    /**
+     * Save the clusters, to a yml file.
+     */
+    public function save($path = 'KMeans.yml')
     {
-
+        $data = array();
+        foreach ($this->clusters as $key => $cluster) {
+            $data[$key] = $cluster->getCentroid();
+        }
+        $this->export($data, $path);
     }
 
     /**
@@ -58,7 +68,7 @@ class KMeansController extends BaseController implements BaseControllerModel
     /**
      * Get the nearest cluster based on the give row.
      */
-    public function getNearestCluster($vector, $dataset)
+    public function getNearestCluster($vector)
     {
         $leastWcss = PHP_INT_MAX;
         $nearestClusterKey = null;
@@ -67,7 +77,7 @@ class KMeansController extends BaseController implements BaseControllerModel
         foreach ($this->clusters as $cluster_key => $cluster) {
             $wcss = 0;
             foreach ($vector->getValues() as $key => $value) {
-                if ($dataset->getColumn($key)->isNumeric()) {
+                if ($vector->getColumn($key)->isNumeric()) {
                     $wcss += pow($value - $cluster->getColumnCentroid($key), 2);
                 }
             }

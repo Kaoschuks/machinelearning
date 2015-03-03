@@ -2,8 +2,35 @@
 
 namespace MachineLearning\Utility\Controller;
 
+use Symfony\Component\Yaml\Dumper;
+use Symfony\Component\Yaml\Parser;
+use Symfony\Component\Yaml\Exception\ParseException;
+
 class BaseController
 {
+    /**
+     * Import specified yml file.
+     */
+    public function import($path)
+    {
+        $yaml = new Parser();
+        try {
+            return file_exists($path) ? $yaml->parse(file_get_contents($path)) : array();
+        } catch (ParseException $e) {
+            printf("Unable to parse the YAML string: %s", $e->getMessage());
+        }
+    }
+
+    /**
+     * Export the given data to the specified path.
+     */
+    public function export($data, $path)
+    {
+        $dumper = new Dumper();
+        $yaml = $dumper->dump($data, 2);
+        file_put_contents($path, $yaml);
+    }
+
     /**
      * Get the default statistics of an array.
      */
