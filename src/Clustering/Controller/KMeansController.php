@@ -2,6 +2,8 @@
 
 namespace MachineLearning\Clustering\Controller;
 
+use MachineLearning\Data\Entity\Object;
+use MachineLearning\Data\Controller\ObjectController;
 use MachineLearning\Utility\Controller\BaseController;
 use MachineLearning\Utility\Model\BaseControllerModel;
 use MachineLearning\Clustering\Entity\Cluster;
@@ -13,12 +15,22 @@ class KMeansController extends BaseController implements BaseControllerModel
 {
     public $clusters;
 
+    public function __construct()
+    {
+        $this->clusters = new ObjectController();
+    }
+
     /**
      * Load the stored clusters.
      */
     public function load($path = 'KMeans.yml')
     {
-        $this->clusters = $this->import($path);
+        $data = $this->import($path);
+        foreach ($data as $key => $values) {
+            $cluster = new Cluster($key);
+            $cluster->centroid->data = $values;
+            $this->clusters->set($key, $cluster);
+        }
     }
 
     /**
@@ -27,8 +39,8 @@ class KMeansController extends BaseController implements BaseControllerModel
     public function save($path = 'KMeans.yml')
     {
         $data = array();
-        foreach ($this->clusters as $key => $cluster) {
-            $data[$key] = $cluster->getCentroid();
+        foreach ($this->clusters as $cluster) {
+            $data[$cluster->key] = $cluster->centroid->data;
         }
         $this->export($data, $path);
     }
@@ -38,30 +50,29 @@ class KMeansController extends BaseController implements BaseControllerModel
      */
     public function initialization($config, $dataset)
     {
-        for ($cluster_key = 1; $cluster_key <= $config['num.clusters']; $cluster_key++) {
-            $cluster = new Cluster();
+        for ($key = 1; $key <= $config['num.clusters']; $key++) {
+            $data = array();
 
-            // Pick k random rows for initial centroid.
-            if ($config['initialization.method'] == 'forgy') {
-                $vector = array_rand($dataset->getVectors());
-                foreach ($dataset->getColumns() as $key => $column) {
-                    if ($column->isNumeric()) {
-                        $cluster->setColumnCentroid($key, $vector->getValue($key));
-                    }
-                }
+            // Pick a random vector for initial centroid.
+            if ($config['initialization.method'] == 'forgy') {;
+                $data = $dataset->vectors->random()->data;
             }
 
             // Pick random centroid between the colomn max and min.
             else {
-                foreach ($dataset->getColumns() as $key => $column) {
-                    if ($column->isNumeric()) {
-                        $stats = $column->getStats();
-                        $cluster->setColumnCentroid($key, $this->rand($stats['min'], $stats['max']));
+                foreach ($dataset->columns as $column) {
+                    $value = null;
+                    if ($this->isNumeric($column->data)) {
+                        $stats = $this->getDefaultStatistics($column->data);
+                        $value = $this->rand($stats['min'], $stats['max']);
                     }
+                    $data[$column->key] = $value;
                 }
             }
 
-            $this->clusters[$cluster_key] = $cluster;
+            $cluster = new Cluster($key);
+            $cluster->centroid->data = $data;
+            $this->clusters->set($key, $cluster);
         }
     }
 
@@ -71,23 +82,20 @@ class KMeansController extends BaseController implements BaseControllerModel
     public function getNearestCluster($vector)
     {
         $leastWcss = PHP_INT_MAX;
-        $nearestClusterKey = null;
+        $nearestCluster = null;
 
-        // Calculate the distance from the the centroid.
-        foreach ($this->clusters as $cluster_key => $cluster) {
-            $wcss = 0;
-            foreach ($vector->getValues() as $key => $value) {
-                if ($vector->getColumn($key)->isNumeric()) {
-                    $wcss += pow($value - $cluster->getColumnCentroid($key), 2);
-                }
-            }
+        // Calculate the distance from the vector to each cluster centroid.
+        foreach ($this->clusters as $cluster) {
+
+            $wcss = $this->squaredDistance($vector->data, $cluster->centroid->data);
+
             if ($wcss < $leastWcss) {
                 $leastWcss = $wcss;
-                $nearestClusterKey = $cluster_key;
+                $nearestCluster = $cluster;
             }
         }
 
-        return $this->clusters[$nearestClusterKey];
+        return $nearestCluster;
     }
 
     /**
@@ -97,28 +105,30 @@ class KMeansController extends BaseController implements BaseControllerModel
     {
         $distance = 0;
 
-        foreach ($this->clusters as $cluster_key => $cluster) {
-            $old_centroid = $this->clusters[$cluster_key]->getCentroid();
-            $new_centroid = array();
+        foreach ($this->clusters as $cluster) {
+            $oldCentroid = clone $cluster->centroid;
 
             // No data available, thus noting to update.
-            if (!@$cluster->getVectors()) {
+            if (!@$cluster->vectors) {
                 continue;
             }
 
-            // Pick new random centroid based on the subset.
-            foreach ($cluster->getVectors() as $vector) {
-                foreach ($cluster->getColumns() as $key => $column) {
-                    if ($column->isNumeric()) {
-                        $new_centroid[$key] = $this->mean($column->getValues());
-                    }
+            $data = array();
+            foreach ($cluster->vectors as $vector) {
+                foreach (array_keys($vector->data) as $key) {
+                    $values = $cluster->vectors->getDataColumn($key);
+                    $data[$key] = $this->isNumeric($values) ? $this->mean($values) : null;
                 }
             }
 
-            // Update the centroid, and remove the subset.
-            $this->clusters[$cluster_key]->setCentroid($new_centroid);;
-            $distance += $this->euclideanDistance($old_centroid, $new_centroid);
-            unset($this->clusters[$cluster_key]->vectors);
+            // Update the centroid.
+            $cluster->centroid->data = $data;
+
+            // Remove the cluster vectors.
+            $cluster->vectors->clear();
+
+            // Calculate the distance.
+            $distance += $this->euclideanDistance($oldCentroid->data, $cluster->centroid->data = $data);
         }
 
         $converged = $distance <= $config['convergion.distance'] ? true : false;

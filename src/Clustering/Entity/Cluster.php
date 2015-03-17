@@ -2,37 +2,18 @@
 
 namespace MachineLearning\Clustering\Entity;
 
-use MachineLearning\Data\Entity\Subset;
+use MachineLearning\Data\Entity\Object;
+use MachineLearning\Data\Controller\ObjectController;
 
-class Cluster extends Subset
+class Cluster extends Object
 {
-    private $centroid;
+    public $centroid;
+    public $vectors;
 
-    /**
-     * Set centroid.
-     */
-    public function setCentroid($centroid) {
-        $this->centroid = $centroid;
-    }
+    public function __construct($key = null, $data = null) {
+        parent::__construct($key, $data);
 
-    /**
-     * Get centroid.
-     */
-    public function getCentroid() {
-        return isset($this->centroid) ? $this->centroid : array();
-    }
-
-    /**
-     * Set column centroid.
-     */
-    public function setColumnCentroid($column, $value) {
-        $this->centroid[$column] = $value;
-    }
-
-    /**
-     * Get column centroid.
-     */
-    public function getColumnCentroid($column) {
-        return isset($this->centroid[$column]) ? $this->centroid[$column] : null;
+        $this->centroid = new Object($key);
+        $this->vectors = new ObjectController();
     }
 }

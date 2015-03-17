@@ -60,28 +60,37 @@ class KNearestNeighbors extends KNearestNeighborsController implements InstanceB
     public function test()
     {
         $config = $this->getConfig();
-        $trainingVectors = $this->trainingData->getVectors();
-        $testVectors = $this->testData->getVectors();
+        // $trainingVectors = $this->trainingData;
+        // $testVectors = $this->testData;
 
-        foreach ($testVectors as $testVector) {
-            $nearestNeighbors = $this->findNearestNeighbors($testVector, $trainingVectors, $config);
-            $class = array();
-
-            if ($config['method'] == 'regression') {
-                foreach ($testVector->getColumns() as $key => $column) {
-                    if ($column->isNumeric()) {
-                        $class[$key] = $this->mean($nearestNeighbors->getColumn($key)->getValues());
-                    }
-                }
-            // } else {
-            //     foreach ($testVector->getColumns() as $key => $column) {
-            //         if ($column->isNumeric()) {
-            //             $majority = $this->majority($nearestNeighbors->getColumn($key)->getValues());
-            //         }
-            //     }
-            }
-
-            $testVector->setClass($class);
+        foreach ($this->testData->vectors as $vector) {
+            $nearestNeighbors = $this->findNearestNeighbors($vector, $this->trainingData->vectors, $config);
         }
+
+
+
+        // $trainingVectors = $this->trainingData->getVectors();
+        // $testVectors = $this->testData->getVectors();
+
+        // foreach ($testVectors as $testVector) {
+        //     $nearestNeighbors = $this->findNearestNeighbors($testVector, $trainingVectors, $config);
+        //     $class = array();
+
+        //     if ($config['method'] == 'regression') {
+        //         foreach ($testVector->getColumns() as $key => $column) {
+        //             if ($column->isNumeric()) {
+        //                 $class[$key] = $this->mean($nearestNeighbors->getColumn($key)->getValues());
+        //             }
+        //         }
+        //     // } else {
+        //     //     foreach ($testVector->getColumns() as $key => $column) {
+        //     //         if ($column->isNumeric()) {
+        //     //             $majority = $this->majority($nearestNeighbors->getColumn($key)->getValues());
+        //     //         }
+        //     //     }
+        //     }
+
+        //     $testVector->setClass($class);
+        // }
     }
 }

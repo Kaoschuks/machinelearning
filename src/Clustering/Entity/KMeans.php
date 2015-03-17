@@ -2,6 +2,7 @@
 
 namespace MachineLearning\Clustering\Entity;
 
+use MachineLearning\Data\Controller\ObjectController;
 use MachineLearning\Clustering\Controller\KMeansController;
 use MachineLearning\Utility\Model\BaseLearningModel;
 use MachineLearning\Utility\Entity\Config;
@@ -64,16 +65,14 @@ class KMeans extends KMeansController implements BaseLearningModel
         $converged = false;
         $config = $this->getConfig();
 
-      // Keep on training until convergion.
-      do {
-          foreach ($this->trainingData->getVectors() as $key => $vector) {
-              $nearestCluster = $this->getNearestCluster($vector);
-
-              // @TODO fix this adddata it takes to much time.
-              $nearestCluster->addData(array($key => $vector->getValues()));
-          }
-          $this->updateClusters($converged, $config);
-      } while (!$converged);
+        // Keep on training until convergion.
+        do {
+            foreach ($this->trainingData->vectors as $vector) {
+                $nearestCluster = $this->getNearestCluster($vector);
+                $nearestCluster->vectors->set($vector->key, $vector);
+            }
+            $this->updateClusters($converged, $config);
+        } while (!$converged);
     }
 
     /**
@@ -81,7 +80,7 @@ class KMeans extends KMeansController implements BaseLearningModel
      */
     public function test()
     {
-        foreach ($this->testData->getVectors() as $key => $vector) {
+        foreach ($this->testData->vectors as $vector) {
             $vector->setClass($this->getNearestCluster($vector));
         }
     }

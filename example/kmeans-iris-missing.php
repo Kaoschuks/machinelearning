@@ -1,17 +1,24 @@
 <?php
 
+$pwd = dirname(__FILE__);
+
 require '../vendor/autoload.php';
+require_once $pwd . "/datasets/iris-missing.php";
 
-use MachineLearning\Data\Dataset;
-use MachineLearning\Clustering\KMeans;
+use MachineLearning\Utility\Entity\Config;
+use MachineLearning\Data\Entity\Dataset;
+use MachineLearning\Clustering\Entity\KMeans;
 
-require_once dirname(__FILE__) . "/datasets/iris-missing.php";
+$config = new Config();
+$config->load($pwd . "/kmeans-iris-missing-config.yml");
 
 $dataset = new Dataset();
+$dataset->setConfig($config);
 $dataset->addData($data);
 
-$cluster = new KMeans(3, 0.001);
-$cluster->addTrainingData($dataset);
+$cluster = new KMeans();
+$cluster->setConfig($config);
+$cluster->setTrainingData($dataset);
 $cluster->train();
 
-print_r($cluster->clusters);
+// print_r($dataset);

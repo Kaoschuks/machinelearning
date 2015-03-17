@@ -15,27 +15,27 @@ class KNearestNeighborsController extends BaseController
         $distances = array();
 
         // Calculate the eucledian distance from the test vector to each vector in the training data.
-        foreach ($trainingVectors as $key => $trainingVector) {
-            $distance = $this->euclideanDistance($testVector->getValues(), $trainingVector->getValues());
+        foreach ($trainingVectors as $trainingVector) {
+            $distance = $this->euclideanDistance($testVector->data, $trainingVector->data);
 
-            if ($distance != 0 && $config['distance.boosting']) {
-                $distance -= (1 / $distance);
-            }
+        //     if ($distance != 0 && $config['distance.boosting']) {
+        //         $distance -= (1 / $distance);
+        //     }
 
-            $distances[$key] = $distance;
-        }
+        //     $distances[$key] = $distance;
+        // }
 
-        // Order the distances form low to high.
-        asort($distances);
+        // // Order the distances form low to high.
+        // asort($distances);
 
-        // Pick the top ones with the shortest distance.
-        $data = array();
-        foreach (array_slice($distances, 0, $config['num.nearest.neighbors'], true) as $key => $distance) {
-            $data[$key] = $trainingVectors[$key]->getValues();
+        // // Pick the top ones with the shortest distance.
+        // $data = array();
+        // foreach (array_slice($distances, 0, $config['num.nearest.neighbors'], true) as $key => $distance) {
+        //     $data[$key] = $trainingVectors[$key]->getValues();
         }
 
         $nearestNeighbors = new Subset();
-        $nearestNeighbors->addData($data);
+        // $nearestNeighbors->addData($data);
 
         return $nearestNeighbors;
     }

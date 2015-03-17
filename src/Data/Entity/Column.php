@@ -2,39 +2,22 @@
 
 namespace MachineLearning\Data\Entity;
 
-use MachineLearning\Utility\Controller\BaseController;
+use MachineLearning\Data\Entity\Object;
 
-/**
- * A column class for fetching column specific data.
- */
-class Column extends BaseController
+class Column extends Object
 {
-    private $values;
-    private $datatype;
+    public $datatype;
 
-    /**
-     * Set the values.
-     */
-    public function setValues($values)
-    {
-        $this->values = $values;
-        $this->setDataType();
+    public function __construct($key = null, $data = null) {
+        parent::__construct($key, $data);
     }
 
     /**
-     * Get the values.
+     * Get the datatype.
      */
-    public function getValues()
+    private function getDataType()
     {
-        return $this->values;
-    }
-
-    /**
-     * Set the datatype.
-     */
-    private function setDataType()
-    {
-        $values = $this->values;
+        $values = $this->data;
 
         if (is_array($values)) {
             $types = array_count_values(array_filter(array_map('gettype', $values), function ($value) {
@@ -50,30 +33,6 @@ class Column extends BaseController
             $datatype = gettype($values);
         }
 
-        $this->datatype = $datatype;
-    }
-
-    /**
-     * Get the datatype.
-     */
-    public function getDataType()
-    {
-        return $this->datatype;
-    }
-
-    /**
-     * Get the default statistics.
-     */
-    public function getStats()
-    {
-        return $this->getDefaultStatistics($this->values);
-    }
-
-    /**
-     * Check if the column is numeric.
-     */
-    public function isNumeric()
-    {
-      return in_array($this->datatype, array('double'));
+        return $datatype;
     }
 }

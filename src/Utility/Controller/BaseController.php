@@ -73,13 +73,13 @@ class BaseController
      */
     public function rand($min, $max)
     {
-        return $min + ($max - $min) * mt_rand(0, 32767)/32767;
+        return $min + ($max - $min) * mt_rand(0, 32767) / 32767;
     }
 
     /**
-     * Calculate the Euclidean distance between 2 arrays with the same keys.
+     * Calculate the squared distance between 2 arrays.
      */
-    public function euclideanDistance($p, $q)
+    public function squaredDistance($p, $q)
     {
         if (count($p) != count($q)) {
             return;
@@ -90,7 +90,15 @@ class BaseController
             $total += pow($p[$key] - $q[$key], 2);
         }
 
-        return sqrt($total);
+        return $total;
+    }
+
+    /**
+     * Calculate the Euclidean distance between 2 arrays with the same keys.
+     */
+    public function euclideanDistance($p, $q)
+    {
+        return sqrt($this->squaredDistance($p, $q));
     }
 
     /**
@@ -100,15 +108,26 @@ class BaseController
      */
     public function majority($values)
     {
-        // Count each unique value.
-      $count_values = array_count_values(array_map(function ($value) {
-        return (string) $value;
-      }, $values));
+          // Count each unique value.
+        $count_values = array_count_values(array_map(function ($value) {
+          return (string) $value;
+        }, $values));
 
-      // Sort from high to low.
-      arsort($count_values);
+        // Sort from high to low.
+        arsort($count_values);
 
-      // return the first item.
-      return reset(array_flip($count_values));
+        // return the first item.
+        return reset(array_flip($count_values));
+    }
+
+    /**
+     * Check if the majority type of the values in the array is numeric.
+     */
+    public function isNumeric($array) {
+        $types = array();
+        foreach ($array as $value) {
+            $types[] = is_numeric($value);
+        }
+        return $this->majority($types);
     }
 }
