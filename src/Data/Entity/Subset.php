@@ -55,6 +55,15 @@ class Subset
         }
     }
 
+    public function getColumnValues($key)
+    {
+        $values = array();
+        foreach ($this->vectors as $vector) {
+            $values[$vector->key] = $vector->get($key);
+        }
+        return $values;
+    }
+
     private function deAssociativeVectorKeys(&$data)
     {
         $new_data = array();
