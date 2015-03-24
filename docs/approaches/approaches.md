@@ -1,5 +1,3 @@
-# Approaches
-
 ### Decision tree
 Wiki article: [Decision tree learning](http://en.wikipedia.org/wiki/Decision_tree_learning)
 Decision tree learning uses a decision tree as a predictive model, which maps observations about an item to conclusions about the item's target value.

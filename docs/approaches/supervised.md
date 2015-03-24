@@ -1,4 +1,3 @@
-# Supervised
 Wiki article: [Supervised learning](http://en.wikipedia.org/wiki/Supervised_learning)
 
 ## k-nearest neighbors

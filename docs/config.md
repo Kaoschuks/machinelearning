@@ -1,5 +1,3 @@
-# Configuration
-
 The Config class facilitates configuration for an project. This class loads and stores configuration from an YAML file.
 
 ### Example (PHP)
