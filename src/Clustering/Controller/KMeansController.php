@@ -3,29 +3,38 @@
 namespace MachineLearning\Clustering\Controller;
 
 use MachineLearning\Data\Entity\Object;
-use MachineLearning\Data\Controller\ObjectController;
-use MachineLearning\Utility\Controller\BaseController;
-use MachineLearning\Utility\Model\BaseControllerModel;
+use MachineLearning\Data\Entity\Collection;
+use MachineLearning\Data\Entity\Dataset;
 use MachineLearning\Clustering\Entity\Cluster;
+use MachineLearning\Utility\Entity\Calculate;
+use MachineLearning\Utility\Entity\Config;
+use MachineLearning\Utility\Entity\Utility;
 
 /**
- * Base class for the clustering algortims.
+ * KMeansController, Contains K means functionality.
+ *
+ * @author Willem Bressers <info@willembressers.nl>
  */
-class KMeansController extends BaseController implements BaseControllerModel
+class KMeansController
 {
     public $clusters;
 
+    /**
+     * Specify the defaults.
+     */
     public function __construct()
     {
-        $this->clusters = new ObjectController();
+        $this->clusters = new Collection();
     }
 
     /**
      * Load the stored clusters.
+     *
+     * @param  string $path
      */
     public function load($path = 'KMeans.yml')
     {
-        $data = $this->import($path);
+        $data = Config::import($path);
         foreach ($data as $key => $values) {
             $cluster = new Cluster($key);
             $cluster->centroid->data = $values;
@@ -34,7 +43,9 @@ class KMeansController extends BaseController implements BaseControllerModel
     }
 
     /**
-     * Save the clusters, to a yml file.
+     * Save the clusters.
+     *
+     * @param  string $path
      */
     public function save($path = 'KMeans.yml')
     {
@@ -42,31 +53,37 @@ class KMeansController extends BaseController implements BaseControllerModel
         foreach ($this->clusters as $cluster) {
             $data[$cluster->key] = $cluster->centroid->data;
         }
-        $this->export($data, $path);
+        Config::export($data, $path);
     }
 
     /**
      * Initialize the clusters.
+     *
+     * @param  Dataset $dataset
+     * @param  Config  $config
      */
-    public function initialization($config, $dataset)
+    public function initialization(Dataset $dataset, Config $config)
     {
-        for ($key = 1; $key <= $config['num.clusters']; $key++) {
+        $configuration = $config->get('KMeans');
+
+        for ($key = 1; $key <= $configuration['num.clusters']; $key++) {
             $data = array();
 
             // Pick a random vector for initial centroid.
-            if ($config['initialization.method'] == 'forgy') {;
+            if ($configuration['initialization.method'] == 'forgy') {;
                 $data = $dataset->vectors->random()->data;
             }
 
             // Pick random centroid between the colomn max and min.
             else {
-                foreach ($dataset->columns as $column) {
+                foreach (array_keys($dataset->columnMap) as $columnKey) {
                     $value = null;
-                    if ($this->isNumeric($column->data)) {
-                        $stats = $this->getDefaultStatistics($column->data);
-                        $value = $this->rand($stats['min'], $stats['max']);
+                    $values = $dataset->vectors->getColumnValues($columnKey);
+                    if (Utility::isNumeric($values)) {
+                        $stats = Calculate::defaultStatistics($values);
+                        $value = Utility::rand($stats['min'], $stats['max']);
                     }
-                    $data[$column->key] = $value;
+                    $data[$columnKey] = $value;
                 }
             }
 
@@ -78,8 +95,12 @@ class KMeansController extends BaseController implements BaseControllerModel
 
     /**
      * Get the nearest cluster based on the give row.
+     *
+     * @param  Object $vector
+     *
+     * @return Cluster
      */
-    public function getNearestCluster($vector)
+    public function getNearestCluster(Object $vector)
     {
         $leastWcss = PHP_INT_MAX;
         $nearestCluster = null;
@@ -87,7 +108,7 @@ class KMeansController extends BaseController implements BaseControllerModel
         // Calculate the distance from the vector to each cluster centroid.
         foreach ($this->clusters as $cluster) {
 
-            $wcss = $this->squaredDistance($vector->data, $cluster->centroid->data);
+            $wcss = Calculate::squaredDistance($vector->data, $cluster->centroid->data);
 
             if ($wcss < $leastWcss) {
                 $leastWcss = $wcss;
@@ -100,9 +121,13 @@ class KMeansController extends BaseController implements BaseControllerModel
 
     /**
      * Update the cluster centroid for the next iteration, or mark the clusters as converged.
+     *
+     * @param  boolean &$converged
+     * @param  Config  $config
      */
-    public function updateClusters(&$converged, $config)
+    public function updateClusters(&$converged, Config $config)
     {
+        $configuration = $config->get('KMeans');
         $distance = 0;
 
         foreach ($this->clusters as $cluster) {
@@ -116,8 +141,8 @@ class KMeansController extends BaseController implements BaseControllerModel
             $data = array();
             foreach ($cluster->vectors as $vector) {
                 foreach (array_keys($vector->data) as $key) {
-                    $values = $cluster->vectors->getDataColumn($key);
-                    $data[$key] = $this->isNumeric($values) ? $this->mean($values) : null;
+                    $values = $cluster->vectors->getColumnValues($key);
+                    $data[$key] = Utility::isNumeric($values) ? Calculate::mean($values) : null;
                 }
             }
 
@@ -128,9 +153,9 @@ class KMeansController extends BaseController implements BaseControllerModel
             $cluster->vectors->clear();
 
             // Calculate the distance.
-            $distance += $this->euclideanDistance($oldCentroid->data, $cluster->centroid->data = $data);
+            $distance += Calculate::euclideanDistance($oldCentroid->data, $cluster->centroid->data = $data);
         }
 
-        $converged = $distance <= $config['convergion.distance'] ? true : false;
+        $converged = $distance <= $configuration['convergion.distance'] ? true : false;
     }
 }

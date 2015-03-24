@@ -6,30 +6,16 @@ Cluster analysis is the assignment of a set of observations into subsets (called
 ## K-Means
 Wiki article: [k-means clustering](http://en.wikipedia.org/wiki/K-means_clustering)
 
-### Usage
-Create a new KMeans object with three variables:
-1. Number of clusters
-2. Total cumulated euclidean distance of all d Dimensions. In otherwords the threshold when convergion is achieved.
-3. The initialization method (forgy, random).
-Add the trainings data to the cluster, and train the clusters.
-
-Both initialization methods result in randomly chosen cluster centroids, this results in different cluster centroids after training.
+The K means clustering algortihm creates k clusters based on the given trainings data. The algortihm works in a few steps:
+* Step 1. Immediately after the trainigs data is added (KMeans::setTrainingData) the k clusters are created, where each cluster centroid is picked based on a random vector (forgy), or based on a random value between the column values max and min.
+* Step 2. In the next step the training (KMeans::train) of the clusters is repeated until convergion. Each trainings vector is assigned to it's nearest cluster (centroid) based on the squared distance. After all vectors are assigned to a cluster, the cluster centroids are updated based on it's assigned vectors. This process is repeated until the centroid of each cluster hardly moves to multidimensional space.
 
 ### Example
 ```php
-require '../vendor/autoload.php';
-
-use MachineLearning\Data\Dataset;
-use MachineLearning\Clustering\KMeans;
-
-require_once dirname(__FILE__) . "/datasets/iris.php";
-
-$dataset = new Dataset();
-$dataset->addData($data);
-
-$cluster = new KMeans(3, 0.001);
-$cluster->addTrainingData($dataset);
+$cluster = new KMeans();
+$cluster->setConfig($config);
+$cluster->setTrainingData($dataset);
 $cluster->train();
-
-print_r($cluster->clusters);
+$cluster->save($pwd . '/kmeans.clusters.yml');
 ```
+This example trains k clusters and saves the centroids to the kmeans.clusters.yml file.

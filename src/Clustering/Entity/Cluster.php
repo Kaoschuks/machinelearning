@@ -3,17 +3,23 @@
 namespace MachineLearning\Clustering\Entity;
 
 use MachineLearning\Data\Entity\Object;
-use MachineLearning\Data\Controller\ObjectController;
+use MachineLearning\Data\Entity\Collection;
 
-class Cluster extends Object
+/**
+ * Cluster, cluster the vectors.
+ *
+ * @author Willem Bressers <info@willembressers.nl>
+ */
+class Cluster
 {
+    public $key;
     public $centroid;
     public $vectors;
 
-    public function __construct($key = null, $data = null) {
-        parent::__construct($key, $data);
-
+    public function __construct($key = 0)
+    {
+        $this->key = $key;
         $this->centroid = new Object($key);
-        $this->vectors = new ObjectController();
+        $this->vectors = new Collection($key);
     }
 }

@@ -3,13 +3,15 @@
 namespace MachineLearning\Clustering\Entity;
 
 use MachineLearning\Data\Controller\ObjectController;
+use MachineLearning\Data\Entity\Dataset;
 use MachineLearning\Clustering\Controller\KMeansController;
 use MachineLearning\Utility\Model\BaseLearningModel;
 use MachineLearning\Utility\Entity\Config;
-use MachineLearning\Data\Entity\Dataset;
 
 /**
- * Cluster the data, based on the KMeans approach.
+ * KMeans, Cluster the data, based on the KMeans approach.
+ *
+ * @author Willem Bressers <info@willembressers.nl>
  */
 class KMeans extends KMeansController implements BaseLearningModel
 {
@@ -19,6 +21,8 @@ class KMeans extends KMeansController implements BaseLearningModel
 
     /**
      * Set the configuration.
+     *
+     * @param Config $config
      */
     public function setConfig(Config $config)
     {
@@ -31,26 +35,20 @@ class KMeans extends KMeansController implements BaseLearningModel
     }
 
     /**
-     * Get the configuration.
-     */
-    public function getConfig()
-    {
-        return $this->config->get('KMeans');
-    }
-
-    /**
      * Set the training data.
+     *
+     * @param Dataset $dataset
      */
     public function setTrainingData(Dataset $dataset)
     {
         $this->trainingData = $dataset;
-        $config = $this->getConfig();
-
-        $this->initialization($config, $dataset);
+        $this->initialization($dataset, $this->config);
     }
 
     /**
      * Set the test data.
+     *
+     * @param Dataset $dataset
      */
     public function setTestData(Dataset $dataset)
     {
@@ -63,7 +61,6 @@ class KMeans extends KMeansController implements BaseLearningModel
     public function train()
     {
         $converged = false;
-        $config = $this->getConfig();
 
         // Keep on training until convergion.
         do {
@@ -71,7 +68,7 @@ class KMeans extends KMeansController implements BaseLearningModel
                 $nearestCluster = $this->getNearestCluster($vector);
                 $nearestCluster->vectors->set($vector->key, $vector);
             }
-            $this->updateClusters($converged, $config);
+            $this->updateClusters($converged, $this->config);
         } while (!$converged);
     }
 

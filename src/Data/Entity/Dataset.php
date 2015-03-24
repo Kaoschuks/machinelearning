@@ -2,21 +2,27 @@
 
 namespace MachineLearning\Data\Entity;
 
-use MachineLearning\Data\Entity\Subset;
+use MachineLearning\Data\Entity\Collection;
+use MachineLearning\Data\Entity\Object;
 use MachineLearning\Utility\Entity\Config;
 
 /**
- * Base class for the data handling.
+ * Dataset, Base class for the data handling.
+ *
+ * @author Willem Bressers <info@willembressers.nl>
  */
-class Dataset extends Subset
+class Dataset
 {
     private $config;
-    public $traningData;
-    public $validationData;
-    public $testData;
+
+    public $vectors;
+    public $vectorMap = array();
+    public $columnMap = array();
 
     /**
      * Set the configuration.
+     *
+     * @param Config $config
      */
     public function setConfig(Config $config)
     {
@@ -30,95 +36,87 @@ class Dataset extends Subset
     }
 
     /**
-     * Get the configuration.
-     */
-    public function getConfig()
-    {
-        return $this->config->get('Dataset');
-    }
-
-    /**
      * Add the raw data
      */
     public function addData($data)
     {
-        $config = $this->getConfig();
+        $config = $this->config->get('Dataset');
 
-//         // Remove rows with missing values.
-//         if ($config['remove.missing.values']) {
-//             $data = $this->missing($data);
-//         }
+        $this->deAssociativeVectorKeys($data);
+        $this->deAssociativeColumnKeys($data);
+        $this->floatval($data);
 
-//         // Normalize the numeric values.
-//         if ($config['normalize.data']) {
-//             $data = $this->normalize($data);
-//         }
+        $this->vectors = new Collection();
 
-//         // Randomize the data.
-//         if ($config['shuffle.data']) {
-//             shuffle($data);
-//         }
-
-//         $this->data = $data;
-
-        parent::addData($data);
+        // Add the data.
+        foreach ($data as $key => $values) {
+            $vector = new Object($key, $values);
+            $this->vectors->set($key, $vector);
+        }
     }
 
-//     /**
-//      * Handle missing values.
-//      */
-//     private function missing($data, $action = 'remove')
-//     {
-//         $missing = array();
+    /**
+     * Map the associative vectors array to an non-associative vectors array.
+     *
+     * @param  array  &$data
+     */
+    private function deAssociativeVectorKeys(array &$data)
+    {
+        // Get the vector keys map.
+        $this->vectorMap = array_keys($data);
 
-//         // Fetch all unique column names.
-//         $column_keys = array();
-//         foreach ($data as $row_key => $row) {
-//             foreach ($row as $column_key => $value) {
-//                 if (!in_array($column_key, array_keys($column_keys))) {
-//                     $column_keys[$column_key] = null;
-//                 }
-//             }
-//         }
+        $new_data = array();
+        foreach ($this->vectorMap as $key => $value) {
+          $new_data[$key] = $data[$value];
+        }
+        $data = $new_data;
+    }
 
-//         // Fill the missing values with NULL.
-//         foreach ($data as $row_key => $row) {
-//             if (!empty(array_diff_key($row, $column_keys))) {
-//                 if ($action == 'remove') {
-//                     unset($data[$row_key]);
-//                 } elseif ($action == 'list') {
-//                     $missing[$row_key] = $row;
-//                 } elseif ($action == 'fill') {
-//                     $data[] = $row + $column_keys;
-//                 }
-//             }
-//         }
+    /**
+     * Map the associative columns array to an non-associative columns array.
+     *
+     * @param  array  &$data
+     */
+    private function deAssociativeColumnKeys(array &$data)
+    {
+        // Get the column keys map.
+        foreach ($data as $array) {
+            $this->columnMap = array_unique(array_merge($this->columnMap, array_keys($array)));
+        }
 
-//         if ($action == 'list') {
-//             return $missing;
-//         }
+        // Map the column keys to the numeric keys.
+        foreach ($data as &$row) {
+            foreach ($this->columnMap as $key => $value) {
+                $row[$key] = null;
+                if (isset($row[$value])) {
+                    $row[$key] = $row[$value];
+                    unset($row[$value]);
+                }
+            }
+        }
+    }
 
-//         return $data;
-//     }
-
-//     /**
-//      * Normalize the data.
-//      */
-//     private function normalize($data)
-//     {
-//         $count = count($data);
-//         foreach ($data as $row_key => $row) {
-//             foreach ($row as $column_key => $value) {
-//                 if (is_numeric($value)) {
-//                     $data[$row_key][$column_key] = $value / ($count * sqrt($count));
-//                 }
-//             }
-//         }
-//         return $data;
-//     }
+    /**
+     * Make the numeric values in the data floats.
+     *
+     * @param  array  &$data
+     */
+    private function floatval(array &$data)
+    {
+        foreach ($data as &$row) {
+            foreach ($row as &$value) {
+                $value = is_numeric($value) ? floatval($value) : $value;
+            }
+        }
+    }
 
     /**
      * Create a subset of the data, by the given start and end point.
+     *
+     * @param  integer $start
+     * @param  integer $length
+     *
+     * @return Dataset
      */
     private function subset($start, $length)
     {
@@ -127,13 +125,21 @@ class Dataset extends Subset
 
         $subset = new Dataset();
         $subset->setConfig($config);
-        $subset->setVectors(array_slice($this->vectors->getMultiple(), $start, $length, true));
+
+        $subset->vectors = new Collection();
+        $subset->vectors->setMultiple(array_slice($this->vectors->getMultiple(), $start, $length, true));
 
         return $subset;
     }
 
     /**
      * Split the dataset in sub-datasets.
+     *
+     * @param  float  $training_ratio
+     * @param  float  $validation_ratio
+     * @param  float  $test_ratio
+     *
+     * @return array
      */
     public function split($training_ratio = 0.7, $validation_ratio = 0.2, $test_ratio = 0.1)
     {
@@ -143,8 +149,10 @@ class Dataset extends Subset
         $validation_length = $size * $validation_ratio;
         $test_length = $size * $test_ratio;
 
-        $this->traningData = $this->subset(0, $training_length);
-        $this->validationData = $this->subset($training_length, $validation_length);
-        $this->testData = $this->subset($training_length + $validation_length, $test_length);
+        return array(
+            $this->subset(0, $training_length),
+            $this->subset($training_length, $validation_length),
+            $this->subset($training_length + $validation_length, $test_length),
+        );
     }
 }

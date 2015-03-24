@@ -6,10 +6,11 @@ use MachineLearning\Supervised\Controller\KNearestNeighborsController;
 use MachineLearning\Utility\Model\InstanceBasedLearningModel;
 use MachineLearning\Utility\Entity\Config;
 use MachineLearning\Data\Entity\Dataset;
-// use MachineLearning\Interfaces\InstanceBasedLearningInterface;
 
 /**
- * Find the nearest neighbors in the trainingset of the given testset.
+ * KNearestNeighbors, Find the nearest neighbors in the trainingset of the given testset.
+ *
+ * @author Willem Bressers <info@willembressers.nl>
  */
 class KNearestNeighbors extends KNearestNeighborsController implements InstanceBasedLearningModel
 {
@@ -19,6 +20,8 @@ class KNearestNeighbors extends KNearestNeighborsController implements InstanceB
 
     /**
      * Set the configuration.
+     *
+     * @param Config $config
      */
     public function setConfig(Config $config)
     {
@@ -31,15 +34,9 @@ class KNearestNeighbors extends KNearestNeighborsController implements InstanceB
     }
 
     /**
-     * Get the configuration.
-     */
-    public function getConfig()
-    {
-        return $this->config->get('KNearestNeighbors');
-    }
-
-    /**
      * Set the training data.
+     *
+     * @param Dataset $dataset
      */
     public function setTrainingData(Dataset $dataset)
     {
@@ -48,6 +45,8 @@ class KNearestNeighbors extends KNearestNeighborsController implements InstanceB
 
     /**
      * Set the test data.
+     *
+     * @param Dataset $dataset
      */
     public function setTestData(Dataset $dataset)
     {
@@ -59,11 +58,9 @@ class KNearestNeighbors extends KNearestNeighborsController implements InstanceB
      */
     public function test()
     {
-        $config = $this->getConfig();
-
         foreach ($this->testData->vectors as $vector) {
-            $nearestNeighbors = $this->findNearestNeighbors($vector, $this->trainingData, $config);
-            $this->classify($vector, $nearestNeighbors, $config);
+            $nearestNeighbors = $this->findNearestNeighbors($vector, $this->trainingData, $this->config);
+            $this->classify($vector, $nearestNeighbors, $this->config);
         }
     }
 }

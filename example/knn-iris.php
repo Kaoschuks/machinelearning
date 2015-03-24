@@ -15,12 +15,12 @@ $config->load($pwd . "/knn-iris-config.yml");
 $dataset = new Dataset();
 $dataset->setConfig($config);
 $dataset->addData($data);
-$dataset->split(0.8, 0, 0.2);
+list($traningData, , $testData) = $dataset->split(0.8, 0, 0.2);
 
 $cluster = new KNearestNeighbors();
 $cluster->setConfig($config);
-$cluster->setTrainingData($dataset->traningData);
-$cluster->setTestData($dataset->testData);
+$cluster->setTrainingData($traningData);
+$cluster->setTestData($testData);
 $cluster->test();
 
-// print_r($dataset);
+print_r($cluster);

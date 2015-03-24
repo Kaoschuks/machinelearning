@@ -2,6 +2,7 @@ site_name: Machine Learning
 pages:
 - [index.md, Home]
 - [install.md, Installation]
+- [config.md, Configuration]
 - [data/preprocessing.md, 'Data', 'Pre-processing']
 - [approaches/clustering.md, 'Learning approaches', 'Clustering']
 - [approaches/supervised.md, 'Learning approaches', 'Supervised']
