@@ -20,7 +20,8 @@ class Collection implements IteratorAggregate
      *
      * @param integer $key
      */
-    public function __construct($key = 0) {
+    public function __construct($key = 0)
+    {
         $this->key = $key;
     }
 
@@ -38,7 +39,7 @@ class Collection implements IteratorAggregate
      * Add an object to the array.
      *
      * @param integer $key
-     * @param mixed  $item\
+     * @param mixed   $item\
      */
     public function set($key, $item)
     {
@@ -71,7 +72,7 @@ class Collection implements IteratorAggregate
     /**
      * Get multiple items.
      *
-     * @param  array  $keys An array of item keys, yet to be returned.
+     * @param array $keys An array of item keys, yet to be returned.
      *
      * @return array of items.
      */
@@ -97,6 +98,7 @@ class Collection implements IteratorAggregate
         foreach ($this->items as $item) {
             $values[$item->key] = $item->get($columnKey);
         }
+
         return $values;
     }
 

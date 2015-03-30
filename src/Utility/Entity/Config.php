@@ -18,7 +18,7 @@ class Config
     /**
      * Load the speficied config file.
      *
-     * @param  string $path
+     * @param string $path
      */
     public function load($path = 'config.yml')
     {
@@ -28,17 +28,17 @@ class Config
     /**
      * Save the $values to the given path.
      *
-     * @param  string $path
+     * @param string $path
      */
     public function save($path = 'config.yml')
     {
-        $this->export($this->values, $this->path);
+        $this->export($this->values, $path);
     }
 
     /**
      * Import specified yml file.
      *
-     * @param  string $path
+     * @param string $path
      *
      * @return array of values
      */
@@ -55,8 +55,8 @@ class Config
     /**
      * Export the given data to the specified path.
      *
-     * @param  array  $values
-     * @param  string $path
+     * @param array  $values
+     * @param string $path
      */
     public function export(array $values, $path)
     {
@@ -71,8 +71,9 @@ class Config
      * @param string $classname
      * @param array  $values
      */
-    public function set($classname, array $values) {
-        $this->values[$classname] = array_merge($values, $this->get($classname));
+    public function set($classname, array $values)
+    {
+        $this->values[$classname] = array_merge($this->get($classname), $values);
     }
 
     /**
@@ -82,7 +83,8 @@ class Config
      *
      * @return array of values
      */
-    public function get($classname) {
+    public function get($classname)
+    {
         return isset($this->values[$classname]) ? $this->values[$classname] : array();
     }
 }

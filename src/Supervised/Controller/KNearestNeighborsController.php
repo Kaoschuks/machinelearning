@@ -19,9 +19,9 @@ class KNearestNeighborsController
     /**
      * Find the K nearest neighbors of the given vector.
      *
-     * @param  Object  $testVector
-     * @param  Dataset $trainingData
-     * @param  Config  $config
+     * @param Object  $testVector
+     * @param Dataset $trainingData
+     * @param Config  $config
      *
      * @return Collection of nearest neighbors
      */
@@ -56,9 +56,9 @@ class KNearestNeighborsController
     /**
      * Classify the given vector based on the it's nearest neighbors.
      *
-     * @param  Object     &$vector
-     * @param  Collection $nearestNeighbors
-     * @param  Config     $config
+     * @param Object     &$vector
+     * @param Collection $nearestNeighbors
+     * @param Config     $config
      */
     public function classify(Object &$vector, Collection $nearestNeighbors, Config $config)
     {

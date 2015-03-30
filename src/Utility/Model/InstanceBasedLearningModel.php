@@ -9,7 +9,7 @@ use MachineLearning\Data\Entity\Dataset;
  *
  * @author Willem Bressers <info@willembressers.nl>
  */
-Interface InstanceBasedLearningModel
+interface InstanceBasedLearningModel
 {
     public function setTrainingData(Dataset $dataset);
     public function setTestData(Dataset $dataset);

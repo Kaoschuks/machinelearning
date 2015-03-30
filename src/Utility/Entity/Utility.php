@@ -12,8 +12,8 @@ class Utility
     /**
      * Custom random method that works with floats.
      *
-     * @param  float $min
-     * @param  float $max
+     * @param float $min
+     * @param float $max
      *
      * @return float
      */
@@ -27,13 +27,13 @@ class Utility
      * All values are sorted by count, and the first (highest) is returned.
      * Values with the same count are also sorted but only the first one is returned.
      *
-     * @param  array  $array
+     * @param array $array
      *
      * @return mixed the first array occurence.
      */
     public function majority(array $array)
     {
-          // Count each unique value.
+        // Count each unique value.
         $count_values = array_count_values(array_map(function ($value) {
           return (string) $value;
         }, $array));
@@ -48,11 +48,13 @@ class Utility
     /**
      * Check if the majority type of the values in the array is numeric.
      */
-    public function isNumeric(array $array) {
+    public function isNumeric(array $array)
+    {
         $types = array();
         foreach ($array as $value) {
             $types[] = is_numeric($value);
         }
+
         return self::majority($types);
     }
 }

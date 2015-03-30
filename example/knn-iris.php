@@ -3,14 +3,14 @@
 $pwd = dirname(__FILE__);
 
 require '../vendor/autoload.php';
-require_once $pwd . "/datasets/iris.php";
+require_once $pwd."/datasets/iris.php";
 
 use MachineLearning\Utility\Entity\Config;
 use MachineLearning\Data\Entity\Dataset;
 use MachineLearning\Supervised\Entity\KNearestNeighbors;
 
 $config = new Config();
-$config->load($pwd . "/knn-iris-config.yml");
+$config->load($pwd."/knn-iris-config.yml");
 
 $dataset = new Dataset();
 $dataset->setConfig($config);

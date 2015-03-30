@@ -2,7 +2,6 @@
 
 namespace MachineLearning\Clustering\Entity;
 
-use MachineLearning\Data\Controller\ObjectController;
 use MachineLearning\Data\Entity\Dataset;
 use MachineLearning\Clustering\Controller\KMeansController;
 use MachineLearning\Utility\Model\BaseLearningModel;

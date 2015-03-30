@@ -35,11 +35,7 @@ class KMeansController
     public function load($path = 'KMeans.yml')
     {
         $data = Config::import($path);
-        foreach ($data as $key => $values) {
-            $cluster = new Cluster($key);
-            $cluster->centroid->data = $values;
-            $this->clusters->set($key, $cluster);
-        }
+        $this->import($data);
     }
 
     /**
@@ -49,29 +45,53 @@ class KMeansController
      */
     public function save($path = 'KMeans.yml')
     {
+        $data = $this->export();
+        Config::export($data, $path);
+    }
+
+    /**
+     * Import data, and build the clusters.
+     *
+     * @param Array $data
+     */
+    public function import($data)
+    {
+        foreach ($data as $key => $values) {
+            $cluster = new Cluster($key);
+            $cluster->centroid->data = $values;
+            $this->clusters->set($key, $cluster);
+        }
+    }
+
+    /**
+     * Export the clusters data.
+     *
+     * @return Array $data
+     */
+    public function export()
+    {
         $data = array();
         foreach ($this->clusters as $cluster) {
             $data[$cluster->key] = $cluster->centroid->data;
         }
-        Config::export($data, $path);
+        return $data;
     }
 
     /**
      * Initialize the clusters.
      *
-     * @param  Dataset $dataset
-     * @param  Config  $config
+     * @param Dataset $dataset
+     * @param Config  $config
      */
     public function initialization(Dataset $dataset, Config $config)
     {
         $configuration = $config->get('KMeans');
+        $data = array();
 
         for ($key = 1; $key <= $configuration['num.clusters']; $key++) {
-            $data = array();
-
             // Pick a random vector for initial centroid.
-            if ($configuration['initialization.method'] == 'forgy') {;
-                $data = $dataset->vectors->random()->data;
+            if ($configuration['initialization.method'] == 'forgy') {
+                $data[$key] = $dataset->vectors->random()->data;
             }
 
             // Pick random centroid between the colomn max and min.
@@ -83,20 +103,18 @@ class KMeansController
                         $stats = Calculate::defaultStatistics($values);
                         $value = Utility::rand($stats['min'], $stats['max']);
                     }
-                    $data[$columnKey] = $value;
+                    $data[$key][$columnKey] = $value;
                 }
             }
-
-            $cluster = new Cluster($key);
-            $cluster->centroid->data = $data;
-            $this->clusters->set($key, $cluster);
         }
+
+        $this->import($data);
     }
 
     /**
      * Get the nearest cluster based on the give row.
      *
-     * @param  Object $vector
+     * @param Object $vector
      *
      * @return Cluster
      */
@@ -107,7 +125,6 @@ class KMeansController
 
         // Calculate the distance from the vector to each cluster centroid.
         foreach ($this->clusters as $cluster) {
-
             $wcss = Calculate::squaredDistance($vector->data, $cluster->centroid->data);
 
             if ($wcss < $leastWcss) {
@@ -122,8 +139,8 @@ class KMeansController
     /**
      * Update the cluster centroid for the next iteration, or mark the clusters as converged.
      *
-     * @param  boolean &$converged
-     * @param  Config  $config
+     * @param boolean &$converged
+     * @param Config  $config
      */
     public function updateClusters(&$converged, Config $config)
     {

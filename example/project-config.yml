@@ -1,0 +1,12 @@
+Dataset:
+    remove.missing.values: true
+    normalize.data: false
+    shuffle.data: true
+    deassociative.column.keys: true
+KMeans:
+    num.clusters: 3
+    convergion.distance: 1
+    initialization.method: random
+    training.data: { 1: [6.5701492537313, 2.9880597014925, 5.3388059701493, 1.8850746268657, null], 2: [5.006, 3.428, 1.462, 0.246, null], 3: [5.6363636363636, 2.6363636363636, 4.0272727272727, 1.2515151515152, null] }
+Project:
+    algorithm: KMeans

@@ -18,7 +18,8 @@ class Object
      * @param integer $key
      * @param array   $data
      */
-    public function __construct($key = null, $data = null) {
+    public function __construct($key = null, $data = null)
+    {
         $this->key = $key;
         $this->data = $data;
     }

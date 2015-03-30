@@ -12,7 +12,7 @@ class Calculate
     /**
      * Get the default statistics of an array.
      *
-     * @param  array  $array
+     * @param array $array
      *
      * @return array of default statistics.
      */
@@ -33,7 +33,7 @@ class Calculate
     /**
      * Calculates the mean of the given values.
      *
-     * @param  array  $array
+     * @param array $array
      *
      * @return float
      */
@@ -45,8 +45,8 @@ class Calculate
     /**
      * Calculates the variance of an array of values based on the mean.
      *
-     * @param  array  $array
-     * @param  float $mean
+     * @param array $array
+     * @param float $mean
      *
      * @return float
      */
@@ -62,8 +62,8 @@ class Calculate
     /**
      * Calculate the squared distance between 2 arrays.
      *
-     * @param  array  $p
-     * @param  array  $q
+     * @param array $p
+     * @param array $q
      *
      * @return float
      */
@@ -84,8 +84,8 @@ class Calculate
     /**
      * Calculate the Euclidean distance between 2 arrays with the same keys.
      *
-     * @param  array  $p
-     * @param  array  $q
+     * @param array $p
+     * @param array $q
      *
      * @return float
      */

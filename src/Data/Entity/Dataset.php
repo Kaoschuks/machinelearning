@@ -2,8 +2,6 @@
 
 namespace MachineLearning\Data\Entity;
 
-use MachineLearning\Data\Entity\Collection;
-use MachineLearning\Data\Entity\Object;
 use MachineLearning\Utility\Entity\Config;
 
 /**
@@ -36,7 +34,7 @@ class Dataset
     }
 
     /**
-     * Add the raw data
+     * Add the raw data.
      */
     public function addData($data)
     {
@@ -58,7 +56,7 @@ class Dataset
     /**
      * Map the associative vectors array to an non-associative vectors array.
      *
-     * @param  array  &$data
+     * @param array &$data
      */
     private function deAssociativeVectorKeys(array &$data)
     {
@@ -67,7 +65,7 @@ class Dataset
 
         $new_data = array();
         foreach ($this->vectorMap as $key => $value) {
-          $new_data[$key] = $data[$value];
+            $new_data[$key] = $data[$value];
         }
         $data = $new_data;
     }
@@ -75,7 +73,7 @@ class Dataset
     /**
      * Map the associative columns array to an non-associative columns array.
      *
-     * @param  array  &$data
+     * @param array &$data
      */
     private function deAssociativeColumnKeys(array &$data)
     {
@@ -99,7 +97,7 @@ class Dataset
     /**
      * Make the numeric values in the data floats.
      *
-     * @param  array  &$data
+     * @param array &$data
      */
     private function floatval(array &$data)
     {
@@ -113,8 +111,8 @@ class Dataset
     /**
      * Create a subset of the data, by the given start and end point.
      *
-     * @param  integer $start
-     * @param  integer $length
+     * @param integer $start
+     * @param integer $length
      *
      * @return Dataset
      */
@@ -135,9 +133,9 @@ class Dataset
     /**
      * Split the dataset in sub-datasets.
      *
-     * @param  float  $training_ratio
-     * @param  float  $validation_ratio
-     * @param  float  $test_ratio
+     * @param float $training_ratio
+     * @param float $validation_ratio
+     * @param float $test_ratio
      *
      * @return array
      */
