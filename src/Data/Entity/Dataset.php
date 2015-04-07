@@ -18,6 +18,14 @@ class Dataset
     public $columnMap = array();
 
     /**
+     * Set the defaults.
+     */
+    public function __construct()
+    {
+        $this->setConfig(new Config());
+    }
+
+    /**
      * Set the configuration.
      *
      * @param Config $config
@@ -38,7 +46,7 @@ class Dataset
      */
     public function addData($data)
     {
-        $config = $this->config->get('Dataset');
+        // $config = $this->config->get('Dataset');
 
         $this->deAssociativeVectorKeys($data);
         $this->deAssociativeColumnKeys($data);

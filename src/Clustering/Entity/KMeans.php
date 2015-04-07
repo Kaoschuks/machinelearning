@@ -19,6 +19,14 @@ class KMeans extends KMeansController implements BaseLearningModel
     public $testData;
 
     /**
+     * Set the defaults.
+     */
+    public function __construct()
+    {
+        $this->setConfig(new Config());
+    }
+
+    /**
      * Set the configuration.
      *
      * @param Config $config
