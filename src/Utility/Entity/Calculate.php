@@ -1,6 +1,6 @@
 <?php
 
-namespace MachineLearning\Utility\Entity;
+namespace League\MachineLearning\Utility\Entity;
 
 /**
  * Calculate, contains several calculations with arrays.

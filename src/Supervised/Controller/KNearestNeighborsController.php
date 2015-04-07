@@ -1,13 +1,13 @@
 <?php
 
-namespace MachineLearning\Supervised\Controller;
+namespace League\MachineLearning\Supervised\Controller;
 
-use MachineLearning\Utility\Entity\Calculate;
-use MachineLearning\Utility\Entity\Config;
-use MachineLearning\Utility\Entity\Utility;
-use MachineLearning\Data\Entity\Collection;
-use MachineLearning\Data\Entity\Dataset;
-use MachineLearning\Data\Entity\Object;
+use League\MachineLearning\Utility\Entity\Calculate;
+use League\MachineLearning\Utility\Entity\Config;
+use League\MachineLearning\Utility\Entity\Utility;
+use League\MachineLearning\Data\Entity\Collection;
+use League\MachineLearning\Data\Entity\Dataset;
+use League\MachineLearning\Data\Entity\Object;
 
 /**
  * KNearestNeighborsController, Contains K nearest neighbors functionality.

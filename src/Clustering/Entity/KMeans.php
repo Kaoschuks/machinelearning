@@ -1,11 +1,11 @@
 <?php
 
-namespace MachineLearning\Clustering\Entity;
+namespace League\MachineLearning\Clustering\Entity;
 
-use MachineLearning\Data\Entity\Dataset;
-use MachineLearning\Clustering\Controller\KMeansController;
-use MachineLearning\Utility\Model\BaseLearningModel;
-use MachineLearning\Utility\Entity\Config;
+use League\MachineLearning\Data\Entity\Dataset;
+use League\MachineLearning\Clustering\Controller\KMeansController;
+use League\MachineLearning\Utility\Model\BaseLearningModel;
+use League\MachineLearning\Utility\Entity\Config;
 
 /**
  * KMeans, Cluster the data, based on the KMeans approach.

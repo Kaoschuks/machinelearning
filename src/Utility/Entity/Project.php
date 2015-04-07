@@ -1,9 +1,9 @@
 <?php
 
-namespace MachineLearning\Utility\Entity;
+namespace League\MachineLearning\Utility\Entity;
 
-use MachineLearning\Utility\Entity\Config;
-use MachineLearning\Data\Entity\Dataset;
+use League\MachineLearning\Utility\Entity\Config;
+use League\MachineLearning\Data\Entity\Dataset;
 
 /**
  * Project, Handle an entire project.
@@ -69,8 +69,8 @@ class Project
     private function load_algorithm($algorithm)
     {
         $namespaces = array(
-            'MachineLearning\Clustering\Entity',
-            'MachineLearning\Supervised\Entity',
+            'League\MachineLearning\Clustering\Entity',
+            'League\MachineLearning\Supervised\Entity',
         );
 
         foreach ($namespaces as $namespace) {

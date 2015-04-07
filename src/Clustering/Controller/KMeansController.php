@@ -1,14 +1,14 @@
 <?php
 
-namespace MachineLearning\Clustering\Controller;
+namespace League\MachineLearning\Clustering\Controller;
 
-use MachineLearning\Data\Entity\Object;
-use MachineLearning\Data\Entity\Collection;
-use MachineLearning\Data\Entity\Dataset;
-use MachineLearning\Clustering\Entity\Cluster;
-use MachineLearning\Utility\Entity\Calculate;
-use MachineLearning\Utility\Entity\Config;
-use MachineLearning\Utility\Entity\Utility;
+use League\MachineLearning\Data\Entity\Object;
+use League\MachineLearning\Data\Entity\Collection;
+use League\MachineLearning\Data\Entity\Dataset;
+use League\MachineLearning\Clustering\Entity\Cluster;
+use League\MachineLearning\Utility\Entity\Calculate;
+use League\MachineLearning\Utility\Entity\Config;
+use League\MachineLearning\Utility\Entity\Utility;
 
 /**
  * KMeansController, Contains K means functionality.

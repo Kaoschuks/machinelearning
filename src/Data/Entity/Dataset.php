@@ -1,8 +1,8 @@
 <?php
 
-namespace MachineLearning\Data\Entity;
+namespace League\MachineLearning\Data\Entity;
 
-use MachineLearning\Utility\Entity\Config;
+use League\MachineLearning\Utility\Entity\Config;
 
 /**
  * Dataset, Base class for the data handling.

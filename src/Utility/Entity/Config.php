@@ -1,6 +1,6 @@
 <?php
 
-namespace MachineLearning\Utility\Entity;
+namespace League\MachineLearning\Utility\Entity;
 
 use Symfony\Component\Yaml\Dumper;
 use Symfony\Component\Yaml\Parser;

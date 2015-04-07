@@ -1,9 +1,9 @@
 <?php
 
-namespace MachineLearning\Clustering\Entity;
+namespace League\MachineLearning\Clustering\Entity;
 
-use MachineLearning\Data\Entity\Object;
-use MachineLearning\Data\Entity\Collection;
+use League\MachineLearning\Data\Entity\Object;
+use League\MachineLearning\Data\Entity\Collection;
 
 /**
  * Cluster, cluster the vectors.

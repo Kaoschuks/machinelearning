@@ -1,6 +1,6 @@
 <?php
 
-namespace MachineLearning\Data\Entity;
+namespace League\MachineLearning\Data\Entity;
 
 /**
  * Object, contains the values.

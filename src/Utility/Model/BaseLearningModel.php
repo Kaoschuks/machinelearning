@@ -1,8 +1,8 @@
 <?php
 
-namespace MachineLearning\Utility\Model;
+namespace League\MachineLearning\Utility\Model;
 
-use MachineLearning\Data\Entity\Dataset;
+use League\MachineLearning\Data\Entity\Dataset;
 
 interface BaseLearningModel
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace MachineLearning\Supervised\Entity;
+namespace League\MachineLearning\Supervised\Entity;
 
-use MachineLearning\Supervised\Controller\KNearestNeighborsController;
-use MachineLearning\Utility\Model\InstanceBasedLearningModel;
-use MachineLearning\Utility\Entity\Config;
-use MachineLearning\Data\Entity\Dataset;
+use League\MachineLearning\Supervised\Controller\KNearestNeighborsController;
+use League\MachineLearning\Utility\Model\InstanceBasedLearningModel;
+use League\MachineLearning\Utility\Entity\Config;
+use League\MachineLearning\Data\Entity\Dataset;
 
 /**
  * KNearestNeighbors, Find the nearest neighbors in the trainingset of the given testset.

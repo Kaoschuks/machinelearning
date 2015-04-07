@@ -1,9 +1,0 @@
-Dataset:
-    remove.missing.values: true
-    normalize.data: false
-    shuffle.data: true
-
-KMeans:
-    num.clusters: 3
-    convergion.distance: 1
-    initialization.method: 'random'
