@@ -1,18 +1,12 @@
 # Machine learning
 A collection of Machine learning PHP classes.
 
-## Sources
-* [Home](http://willembressers.github.io/machinelearning/)
-* [Documentation](http://machinelearning.readthedocs.org/en/latest/)
-
-[![Latest Version](https://img.shields.io/github/release/thephpleague/machinelearning.svg?style=flat-square)](https://github.com/thephpleague/machinelearning/releases)
+[![Latest Version](https://img.shields.io/github/release/willembressers/machinelearning.svg?style=flat-square)](https://github.com/willembressers/machinelearning/releases)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
-[![Build Status](https://img.shields.io/travis/thephpleague/machinelearning/master.svg?style=flat-square)](https://travis-ci.org/thephpleague/machinelearning)
-[![Coverage Status](https://img.shields.io/scrutinizer/coverage/g/thephpleague/machinelearning.svg?style=flat-square)](https://scrutinizer-ci.com/g/thephpleague/machinelearning/code-structure)
-[![Quality Score](https://img.shields.io/scrutinizer/g/thephpleague/machinelearning.svg?style=flat-square)](https://scrutinizer-ci.com/g/thephpleague/machinelearning)
-[![Total Downloads](https://img.shields.io/packagist/dt/league/machinelearning.svg?style=flat-square)](https://packagist.org/packages/league/machinelearning)
-
-**Note:** Replace ```Willem Bressers``` ```willembressers``` ```https://github.com/willembressers``` ```info@willembressers.nl``` ```machinelearning``` ```A collection of Machine learning PHP classes.``` with their correct values in [README.md](README.md), [CHANGELOG.md](CHANGELOG.md), [CONTRIBUTING.md](CONTRIBUTING.md), [LICENSE.md](LICENSE.md) and [composer.json](composer.json) files, then delete this line.
+[![Build Status](https://img.shields.io/travis/willembressers/machinelearning/master.svg?style=flat-square)](https://travis-ci.org/willembressers/machinelearning)
+[![Coverage Status](https://img.shields.io/scrutinizer/coverage/g/willembressers/machinelearning.svg?style=flat-square)](https://scrutinizer-ci.com/g/willembressers/machinelearning/code-structure)
+[![Quality Score](https://img.shields.io/scrutinizer/g/willembressers/machinelearning.svg?style=flat-square)](https://scrutinizer-ci.com/g/willembressers/machinelearning)
+[![Total Downloads](https://img.shields.io/packagist/dt/willembressers/machinelearning.svg?style=flat-square)](https://packagist.org/packages/willembressers/machinelearning)
 
 This is where your description should go. Try and limit it to a paragraph or two, and maybe throw in a mention of what
 PSRs you support to avoid any confusion with users and contributors.
@@ -49,7 +43,6 @@ If you discover any security related issues, please email info@willembressers.nl
 ## Credits
 
 - [Willem Bressers](https://github.com/willembressers)
-- [All Contributors](../../contributors)
 
 ## License
 
