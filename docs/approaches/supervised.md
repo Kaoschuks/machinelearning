@@ -16,3 +16,10 @@ $cluster->test();
 print_r($cluster);
 ```
 This example finds which vectors in the given test data has the nearest neighbors in the training data, and prints the cluster objects.
+
+## Decision trees
+
+### Example
+```php
+# TODO
+```

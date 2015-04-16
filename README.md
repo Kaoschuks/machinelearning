@@ -23,7 +23,6 @@ $ composer require league/machinelearning
 
 ``` php
 $skeleton = new League\MachineLearning();
-echo $skeleton->echoPhrase('Hello, League!');
 ```
 
 ## Testing
@@ -43,6 +42,11 @@ If you discover any security related issues, please email info@willembressers.nl
 ## Credits
 
 - [Willem Bressers](https://github.com/willembressers)
+
+## Documentation
+
+* [Home](http://willembressers.github.io/machinelearning/)
+* [Documentation](http://machinelearning.readthedocs.org/en/latest/)
 
 ## License
 
