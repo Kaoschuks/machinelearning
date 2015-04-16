@@ -93,4 +93,48 @@ class Calculate
     {
         return sqrt(self::squaredDistance($p, $q));
     }
+
+    /**
+     * Calculate the value frequencies of a given array.
+     *
+     * @param  array  $array
+     *
+     * @return float
+     */
+    public function frequencies(array $array)
+    {
+        $frequencies = array();
+
+        # Calculate the frequency of each of the values in the target attr
+        foreach ($array as $value) {
+            if (in_array($value, $frequencies)) {
+                $frequencies[$value] += 1;
+            }
+            else
+            {
+                $frequencies[$value] = 1;
+            }
+        }
+
+        return $frequencies;
+    }
+
+    /**
+     * Calculate the entropy of a given array.
+     *
+     * @param  array  $array
+     *
+     * @return float
+     */
+    public function entropy(array $array)
+    {
+        $entropy = 0;
+        $frequencies = self::frequencies($array);
+
+        foreach ($frequencies as $frequency) {
+            $entropy += (-$frequency / count($frequencies)) * log($frequency / count($frequencies), 2);
+        }
+
+        return $entropy;
+    }
 }
