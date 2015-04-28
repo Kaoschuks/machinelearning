@@ -95,46 +95,43 @@ class Calculate
     }
 
     /**
-     * Calculate the value frequencies of a given array.
-     *
-     * @param  array  $array
-     *
-     * @return float
-     */
-    public function frequencies(array $array)
-    {
-        $frequencies = array();
-
-        # Calculate the frequency of each of the values in the target attr
-        foreach ($array as $value) {
-            if (in_array($value, $frequencies)) {
-                $frequencies[$value] += 1;
-            }
-            else
-            {
-                $frequencies[$value] = 1;
-            }
-        }
-
-        return $frequencies;
-    }
-
-    /**
      * Calculate the entropy of a given array.
      *
-     * @param  array  $array
+     * @param  array  $frequencies
      *
      * @return float
      */
-    public function entropy(array $array)
+    public function entropy(array $frequencies)
     {
         $entropy = 0;
-        $frequencies = self::frequencies($array);
+        $total = array_sum($frequencies);
 
         foreach ($frequencies as $frequency) {
-            $entropy += (-$frequency / count($frequencies)) * log($frequency / count($frequencies), 2);
+            if ($proportion = $frequency / $total) {
+                $entropy += -($proportion * log($proportion, 2));
+            }
         }
 
         return $entropy;
+    }
+
+    /**
+     * Calculate the informatoin gain of attributes array based on the classifier array.
+     *
+     * @param  array  $classifier_frequencies
+     * @param  array  $attribute_frequencies
+     *
+     * @return float
+     */
+    public function gain(array $classifier_frequencies, array $attribute_frequencies)
+    {
+        $classifier_total = array_sum($classifier_frequencies);
+
+        $gain = Calculate::entropy($classifier_frequencies);
+        foreach ($attribute_frequencies as $value => $frequencies) {
+            $gain -= (array_sum($frequencies) / $classifier_total) * Calculate::entropy($frequencies);
+        }
+
+        return $gain;
     }
 }

@@ -57,4 +57,49 @@ class Utility
 
         return self::majority($types);
     }
+
+    /**
+     * Calculate the value frequencies of a given array.
+     *
+     * @param  array  $array
+     *
+     * @return float
+     */
+    public function frequencies(array $array)
+    {
+        $frequencies = array();
+
+        # Calculate the frequency of each of the values in the target attr
+        foreach ($array as $value) {
+            if (in_array($value, array_keys($frequencies))) {
+                $frequencies[$value] += 1;
+            }
+            else
+            {
+                $frequencies[$value] = 1;
+            }
+        }
+
+        return $frequencies;
+    }
+
+    public function classifierFrequencies(array $arrayOne, array $arrayTwo)
+    {
+        $frequencies = array();
+
+        if (count($arrayOne) == count($arrayTwo)) {
+            foreach ($arrayOne as $keyOne => $valueOne) {
+                foreach ($arrayTwo as $keyTwo => $valueTwo) {
+                    $frequencies[$valueTwo][$valueOne] = 0;
+                }
+            }
+
+            # Calculate the frequency of each of the values in the target attr
+            foreach ($arrayTwo as $key => $value) {
+                $frequencies[$value][$arrayOne[$key]] += 1;
+            }
+        }
+
+        return $frequencies;
+    }
 }

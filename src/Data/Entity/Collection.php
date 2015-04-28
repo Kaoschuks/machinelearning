@@ -81,6 +81,18 @@ class Collection implements IteratorAggregate
         return empty($keys) ? $this->items : array_intersect_key($this->items, $keys);
     }
 
+    public function getHighest($objectKey)
+    {
+        $values = array();
+        foreach ($this->items as $key => $item) {
+            $values[$key] = $item->get($objectKey);
+        }
+        arsort($values);
+        reset($values);
+
+        return $this->items[key($values)];
+    }
+
     /**
      * Remove all the items.
      */
