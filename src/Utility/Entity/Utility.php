@@ -42,7 +42,8 @@ class Utility
         arsort($count_values);
 
         // return the first item.
-        return reset(array_flip($count_values));
+        $values = array_flip($count_values);
+        return reset($values);
     }
 
     /**

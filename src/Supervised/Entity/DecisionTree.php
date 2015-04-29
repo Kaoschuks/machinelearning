@@ -114,7 +114,8 @@ class DecisionTree implements BaseLearningModel
         // Sort the attributes from high to low.
         $item = $attributes->getHighest('gain');
 
+        // Set the root node.
         $this->tree->insert($item);
-        print_r($this->tree);
+        // print_r($this->tree);
     }
 }

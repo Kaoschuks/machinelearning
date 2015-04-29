@@ -32,7 +32,9 @@ class Config
      */
     public function save($path = 'config.yml')
     {
-        $this->export($this->values, $path);
+        if (is_array($this->values)) {
+            $this->export($this->values, $path);   
+        }
     }
 
     /**
@@ -81,7 +83,7 @@ class Config
      *
      * @param string $classname
      *
-     * @return array of values
+     * @return array values
      */
     public function get($classname)
     {

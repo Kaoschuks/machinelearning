@@ -58,9 +58,11 @@ class KNearestNeighbors extends KNearestNeighborsController implements InstanceB
      */
     public function test()
     {
+        $classify = array();
         foreach ($this->testData->vectors as $vector) {
             $nearestNeighbors = $this->findNearestNeighbors($vector, $this->trainingData, $this->config);
-            $this->classify($vector, $nearestNeighbors, $this->config);
+            $classify[$vector->id] = $this->classify($vector, $nearestNeighbors, $this->config);
         }
+        return $classify;
     }
 }

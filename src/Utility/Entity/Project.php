@@ -17,8 +17,6 @@ class Project
 
     /**
      * Set the configuration.
-     *
-     * @param Config $config
      */
     public function __construct()
     {
@@ -88,7 +86,7 @@ class Project
      /**
      * Set the training data.
      *
-     * @param Dataset $dataset
+     * @param Dataset $data
      */
     public function setTrainingData($data)
     {
@@ -101,7 +99,7 @@ class Project
      /**
      * Set the test data.
      *
-     * @param Dataset $dataset
+     * @param Dataset $data
      */
     public function setTestData($data)
     {

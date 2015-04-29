@@ -39,7 +39,7 @@ class Collection implements IteratorAggregate
      * Add an object to the array.
      *
      * @param integer $key
-     * @param mixed   $item\
+     * @param mixed   $item
      */
     public function set($key, $item)
     {
@@ -49,7 +49,7 @@ class Collection implements IteratorAggregate
     /**
      * Set multiple items.
      *
-     * @param array $items An array of items, yet to be added to the collection.
+     * @param array $items
      */
     public function setMultiple(array $items)
     {
@@ -63,7 +63,7 @@ class Collection implements IteratorAggregate
      *
      * @param integer $key
      *
-     * @return item
+     * @return $item
      */
     public function get($key)
     {
@@ -72,15 +72,22 @@ class Collection implements IteratorAggregate
     /**
      * Get multiple items.
      *
-     * @param array $keys An array of item keys, yet to be returned.
+     * @param array $keys
      *
-     * @return array of items.
+     * @return array $items
      */
     public function getMultiple(array $keys = array())
     {
         return empty($keys) ? $this->items : array_intersect_key($this->items, $keys);
     }
 
+    /**
+     * Get the item with the highest object key.
+     *
+     * @param string objectKey
+     *
+     * @return array $item
+     */
     public function getHighest($objectKey)
     {
         $values = array();
@@ -103,6 +110,10 @@ class Collection implements IteratorAggregate
 
     /**
      * Get the column values from all items.
+     *
+     * @param string $columnKey
+     *
+     * @return array $values
      */
     public function getColumnValues($columnKey)
     {
@@ -117,7 +128,7 @@ class Collection implements IteratorAggregate
     /**
      * Count all items.
      *
-     * @return integer.
+     * @return integer
      */
     public function count()
     {

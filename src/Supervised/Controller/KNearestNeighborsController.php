@@ -68,7 +68,7 @@ class KNearestNeighborsController
             foreach ($vector->data as $key => $value) {
                 $values = $nearestNeighbors->getColumnValues($key);
                 if (Utility::isNumeric($values)) {
-                    $vector->class = Calculate::mean($values);
+                    return Calculate::mean($values);
                 }
             }
         }
