@@ -1,29 +1,32 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: willembressers
- * Date: 26/06/15
- * Time: 21:43
+ * @category
+ * @package
+ * @author Willem Bressers <info@willembressers.nl>
+ * @license
+ * @link
  */
 
 namespace League\MachineLearning\Test;
 
 
 use League\MachineLearning\Service\MachineLearningService;
+use League\MachineLearning\Service\YamlFileHandler;
 
+/**
+ * Class MachineLearningServiceTest
+ * @package League\MachineLearning\Test
+ */
 class MachineLearningServiceTest extends \PHPUnit_Framework_TestCase {
 
     /**
      * @test Creation of MachineLearningService and loading Configuration.
      */
-    public function testCreateMachineLearningService() {
-        $service = new MachineLearningService();
+    public function testCreateMachineLearningService()
+    {
+        $configuration = new YamlFileHandler(__DIR__ . '/assets/config.yml');
 
-        // Test if configuration initially is empty.
-        $this->assertEmpty($service->getConfiguration());
-
-        // Test if configuration initially is NOT empty.
-        $service->loadConfiguration(__DIR__ . '/assets/config.yml');
+        $service = new MachineLearningService($configuration);
         $this->assertNotEmpty($service->getConfiguration());
     }
 }

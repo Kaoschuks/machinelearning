@@ -1,55 +1,43 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: willembressers
- * Date: 26/06/15
- * Time: 21:43
+ * @category
+ * @package
+ * @author Willem Bressers <info@willembressers.nl>
+ * @license
+ * @link
  */
 
 namespace League\MachineLearning\Service;
 
-
-use Symfony\Component\Yaml\Dumper;
-use Symfony\Component\Yaml\Parser;
-
+/**
+ * Class MachineLearningService
+ * @package League\MachineLearning\Service
+ */
 class MachineLearningService {
 
-    private $path;
     private $configuration;
 
-    function __construct($path = '')
+    /**
+     * @param YamlFileHandler $configuration
+     */
+    function __construct(YamlFileHandler $configuration)
     {
-        $this->loadConfiguration($path);
+        $this->configuration = $configuration;
     }
 
     /**
-     * Get the configuration.
-     *
-     * @return mixed
+     * @return YamlFileHandler
      */
     public function getConfiguration()
     {
-        return $this->configuration;
+        return $this->configuration->getContent();
     }
 
     /**
-     * Load the configuration from a path.
-     *
-     * @param string $path
+     * @param YamlFileHandler $configuration
      */
-    public function loadConfiguration($path)
+    public function setConfiguration($configuration)
     {
-        $this->path = $path;
-        $this->configuration = array();
-
-        if ($this->path && file_exists($this->path)) {
-            $yaml = new Parser();
-            try {
-                $this->configuration = $yaml->parse(file_get_contents($this->path));
-            } catch (ParseException $e) {
-                printf("Unable to parse the YAML string: %s", $e->getMessage());
-            }
-        }
+        $this->configuration->setContent($configuration);
     }
-
 }
