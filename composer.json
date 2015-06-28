@@ -23,7 +23,7 @@
       "source": "https://github.com/willembressers/machinelearning"
     },
     "require": {
-        "php" : ">=5.5.9",
+        "php" : ">=5.4",
         "symfony/yaml": "2.6.*"
     },
     "require-dev": {
