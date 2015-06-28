@@ -1,7 +1,7 @@
 <?php
 /**
  * @category
- * @package
+ * @package League\MachineLearning\Service
  * @author Willem Bressers <info@willembressers.nl>
  * @license
  * @link
