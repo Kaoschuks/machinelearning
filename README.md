@@ -21,8 +21,30 @@ $ composer require league/machinelearning
 
 ## Usage
 
+Create a Machine learning service, and add the configuration file. Now you are all set up and ready for training / testing.
+
 ``` php
-$skeleton = new League\MachineLearning();
+$configuration = new YamlFileHandler(__DIR__ . '/assets/config.yml');
+$service = new MachineLearningService($configuration);
+
+// $service->train($data);
+```
+
+The configuration is loaded an stored in a YAML file. 
+
+``` yml
+Dataset:
+    remove.missing.values: true
+    normalize.data: false
+    shuffle.data: true
+
+Algortihms:
+    1:
+        type: KNearestNeighbors:
+        configuration: 
+            num.nearest.neighbors: 3
+            method: 'regression'
+            distance.boosting: true
 ```
 
 ## Testing
