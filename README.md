@@ -24,10 +24,10 @@ $ composer require league/machinelearning
 Create a Machine learning service, and add the configuration file. Now you are all set up and ready for training / testing.
 
 ``` php
-$service = new League\MachineLearningService();
-$service->loadConfiguration(__DIR__ . '/assets/config.yml');
+$configuration = new YamlFileHandler(__DIR__ . '/assets/config.yml');
+$service = new MachineLearningService($configuration);
 
-$service->train($data);
+// $service->train($data);
 ```
 
 The configuration is loaded an stored in a YAML file. 
