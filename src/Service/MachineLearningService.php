@@ -1,10 +1,10 @@
 <?php
 /**
- * @category
+ * @category Service Object.
  * @package League\MachineLearning\Service
  * @author Willem Bressers <info@willembressers.nl>
- * @license
- * @link
+ * @license MIT
+ * @link https://github.com/willembressers/machinelearning
  */
 
 namespace League\MachineLearning\Service;
@@ -13,14 +13,15 @@ namespace League\MachineLearning\Service;
  * Class MachineLearningService
  * @package League\MachineLearning\Service
  */
-class MachineLearningService {
+class MachineLearningService
+{
 
     private $configuration;
 
     /**
      * @param YamlFileHandler $configuration
      */
-    function __construct(YamlFileHandler $configuration)
+    public function __construct(YamlFileHandler $configuration)
     {
         $this->configuration = $configuration;
     }

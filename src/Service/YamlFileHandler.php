@@ -1,14 +1,13 @@
 <?php
 /**
- * @category
+ * @category Service Object.
  * @package League\MachineLearning\Service
  * @author Willem Bressers <info@willembressers.nl>
- * @license
- * @link
+ * @license MIT
+ * @link https://github.com/willembressers/machinelearning
  */
 
 namespace League\MachineLearning\Service;
-
 
 use Symfony\Component\Yaml\Dumper;
 use Symfony\Component\Yaml\Parser;
@@ -17,14 +16,15 @@ use Symfony\Component\Yaml\Parser;
  * Class YamlFileHandler
  * @package League\MachineLearning\Service
  */
-class YamlFileHandler {
+class YamlFileHandler
+{
 
     protected $file;
 
     /**
      * @param mixed $file
      */
-    function __construct($file = '')
+    public function __construct($file = '')
     {
         $this->file = $file;
     }
