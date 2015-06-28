@@ -19,7 +19,7 @@ class YamlFileHandlerTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
-     * @test Creation of MachineLearningService and loading Configuration.
+     * @test
      */
     public function testLoadYamlFile()
     {
@@ -29,7 +29,8 @@ class YamlFileHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @test Creation of MachineLearningService and loading Configuration.
+     * @test
+     * @depends testLoadYamlFile
      */
     public function testSaveYamlFile()
     {

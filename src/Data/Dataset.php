@@ -7,7 +7,7 @@
  * @link https://github.com/willembressers/machinelearning
  */
 
-namespace League\MachineLearning\Dataset;
+namespace League\MachineLearning\Data;
 
 /**
  * Class Dataset
@@ -15,5 +15,13 @@ namespace League\MachineLearning\Dataset;
  */
 class Dataset
 {
+    private $instances;
 
+    /**
+     * @param Instance $instance
+     */
+    public function setInstance(Instance $instance)
+    {
+        $this->instances[] = $instance;
+    }
 }

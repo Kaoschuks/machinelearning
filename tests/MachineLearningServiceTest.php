@@ -18,14 +18,12 @@ use League\MachineLearning\Service\YamlFileHandler;
  */
 class MachineLearningServiceTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
-     * @test Creation of MachineLearningService and loading Configuration.
+     * @test
      */
     public function testCreateMachineLearningService()
     {
         $configuration = new YamlFileHandler(__DIR__ . '/assets/config.yml');
-
         $service = new MachineLearningService($configuration);
         $this->assertNotEmpty($service->getConfiguration());
     }

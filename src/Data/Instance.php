@@ -7,7 +7,7 @@
  * @link https://github.com/willembressers/machinelearning
  */
 
-namespace League\MachineLearning\Dataset;
+namespace League\MachineLearning\Data;
 
 /**
  * Class Instance
@@ -16,4 +16,13 @@ namespace League\MachineLearning\Dataset;
 class Instance
 {
 
+    private $data;
+
+    /**
+     * @param mixed $data
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
+    }
 }

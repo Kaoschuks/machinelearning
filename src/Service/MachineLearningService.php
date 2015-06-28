@@ -41,4 +41,12 @@ class MachineLearningService
     {
         $this->configuration->setContent($configuration);
     }
+
+    /**
+     * @param DataHandler $data
+     */
+    public function train(DataHandler $data)
+    {
+
+    }
 }
