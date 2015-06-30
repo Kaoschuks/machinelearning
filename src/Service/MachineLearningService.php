@@ -55,8 +55,8 @@ class MachineLearningService
      */
     public function train()
     {
-        foreach ($this->getConfiguration()->getAlgorithms() as $algorithm) {
-            var_dump($algorithm);
-        }
+//        foreach ($this->getConfiguration()->getAlgorithms() as $algorithm) {
+//
+//        }
     }
 }

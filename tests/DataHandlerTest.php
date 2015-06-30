@@ -28,6 +28,6 @@ class DataHandlerTest extends \PHPUnit_Framework_TestCase
         $file = new CsvFileHandler(__DIR__ . '/assets/iris.csv');
 
         $dataHandler = new DataHandler($file->getContent());
-        $this->assertEquals($dataHandler->getDataset()->count(), 152);
+        $this->assertEquals($dataHandler->getDataset()->count(), 151);
     }
 }
