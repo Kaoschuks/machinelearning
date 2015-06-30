@@ -13,6 +13,8 @@ use League\MachineLearning\Data\Instance;
 use League\MachineLearning\Data\Dataset;
 
 /**
+ * This class facilitates several actions on the dataset.
+ *
  * Class DataHandler
  * @package League\MachineLearning\Service
  */
@@ -20,13 +22,19 @@ class DataHandler
 {
     private $dataset;
 
-    public function __construct()
+    /**
+     * @param array $data
+     */
+    public function __construct($data = array())
     {
         $this->dataset = new Dataset();
+        $this->addData($data);
     }
 
     /**
-     * @return Dataset
+     * Returns the dataset.
+     *
+     * @return mixed
      */
     public function getDataset()
     {
@@ -34,6 +42,8 @@ class DataHandler
     }
 
     /**
+     * Loads raw data into the dataset.
+     *
      * @param $data
      */
     public function addData($data)
@@ -41,7 +51,7 @@ class DataHandler
         foreach ($data as $row) {
             $instance = new Instance();
             $instance->setData($row);
-            $this->dataset->setInstance($instance);
+            $this->dataset->attach($instance);
         }
     }
 }

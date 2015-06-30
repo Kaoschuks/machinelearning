@@ -10,16 +10,19 @@
 namespace League\MachineLearning\Data;
 
 /**
+ * This class contains the individual instance data.
+ *
  * Class Instance
- * @package League\MachineLearning\Dataset
+ * @package League\MachineLearning\Data
  */
 class Instance
 {
-
     private $data;
 
     /**
-     * @param mixed $data
+     * Add data to the instance.
+     *
+     * @param $data
      */
     public function setData($data)
     {

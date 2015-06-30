@@ -9,19 +9,15 @@
 
 namespace League\MachineLearning\Data;
 
-/**
- * Class Dataset
- * @package League\MachineLearning\Dataset
- */
-class Dataset
-{
-    private $instances;
+use SplObjectStorage;
 
-    /**
-     * @param Instance $instance
-     */
-    public function setInstance(Instance $instance)
-    {
-        $this->instances[] = $instance;
-    }
+/**
+ * This class stores the data in an SplObjectStorage.
+ *
+ * Class Dataset
+ * @package League\MachineLearning\Data
+ */
+class Dataset extends SplObjectStorage
+{
+
 }

@@ -10,43 +10,53 @@
 namespace League\MachineLearning\Service;
 
 /**
+ * This class handles the basic commands.
+ *
  * Class MachineLearningService
  * @package League\MachineLearning\Service
  */
 class MachineLearningService
 {
-
     private $configuration;
+    private $dataHandler;
 
     /**
-     * @param YamlFileHandler $configuration
+     * @param ConfigurationHandler $configuration
+     * @param DataHandler $dataHandler
      */
-    public function __construct(YamlFileHandler $configuration)
+    public function __construct(ConfigurationHandler $configuration, DataHandler $dataHandler)
     {
         $this->configuration = $configuration;
+        $this->dataHandler = $dataHandler;
     }
 
     /**
-     * @return YamlFileHandler
+     * Returns the ConfigurationHandler.
+     *
+     * @return ConfigurationHandler
      */
     public function getConfiguration()
     {
-        return $this->configuration->getContent();
+        return $this->configuration;
     }
 
     /**
-     * @param YamlFileHandler $configuration
+     * Returns the DataHandler.
+     *
+     * @return DataHandler
      */
-    public function setConfiguration($configuration)
+    public function getDataHandler()
     {
-        $this->configuration->setContent($configuration);
+        return $this->dataHandler;
     }
 
     /**
-     * @param DataHandler $data
+     * Applies training on all the specified algorithms.
      */
-    public function train(DataHandler $data)
+    public function train()
     {
-
+        foreach ($this->getConfiguration()->getAlgorithms() as $algorithm) {
+            var_dump($algorithm);
+        }
     }
 }

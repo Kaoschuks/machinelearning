@@ -23,8 +23,9 @@
       "source": "https://github.com/willembressers/machinelearning"
     },
     "require": {
-        "php" : ">=5.4",
-        "symfony/yaml": "2.6.*"
+        "php" : ">=5.5",
+        "symfony/yaml": "2.6.*",
+        "league/csv": "7.1.2"
     },
     "require-dev": {
         "phpunit/phpunit" : "4.*",

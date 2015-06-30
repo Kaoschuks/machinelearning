@@ -1,6 +1,0 @@
-Dataset:
-    remove.missing.values: true
-    normalize.data: false
-    shuffle.data: true
-Algortihms:
-    1: { type: 'KNearestNeighbors:', configuration: { num.nearest.neighbors: 3, method: regression, distance.boosting: true } }

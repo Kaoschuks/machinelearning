@@ -9,33 +9,35 @@
 
 namespace League\MachineLearning\Test;
 
-use League\MachineLearning\Service\YamlFileHandler;
+use League\MachineLearning\Service\ConfigurationHandler;
 
 /**
- * Class YamlFileHandlerTest
+ * This class test the ConfigurationHandler.
+ *
+ * Class ConfigurationHandlerTest
  * @package League\MachineLearning\Test
  */
-class YamlFileHandlerTest extends \PHPUnit_Framework_TestCase
+class ConfigurationHandlerTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
-     * @test
+     * @test the loading of the configuration file.
      */
-    public function testLoadYamlFile()
+    public function testLoadConfigurationFile()
     {
-        $file = new YamlFileHandler();
-        $file->setFile(__DIR__ . '/assets/config.yml');
+        $file = new ConfigurationHandler();
+        $file->setFile(__DIR__ . '/assets/KNearestNeighborsConfig.yml');
         $this->assertNotEmpty($file->getContent());
     }
 
     /**
-     * @test
-     * @depends testLoadYamlFile
+     * @test the saving of the configuration file.
+     * @depends testLoadConfigurationFile
      */
-    public function testSaveYamlFile()
+    public function testSaveConfigurationlFile()
     {
-        $file = new YamlFileHandler();
-        $file->setFile(__DIR__ . '/assets/config.yml');
+        $file = new ConfigurationHandler();
+        $file->setFile(__DIR__ . '/assets/KNearestNeighborsConfig.yml');
 
         // Backup the file contents.
         $content = $file->getContent();
